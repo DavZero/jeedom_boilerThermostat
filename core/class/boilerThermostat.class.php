@@ -787,13 +787,13 @@ class boilerThermostatCmd extends cmd {
         break;
 
       case 'status':
-        $outputStatus = 0;
         //Gestion de la température de référence (le pic haut ou bas)
         $mode = $this->getEqLogic()->getCmd('info', 'mode')->execCmd();
         $needSave = false;
         $actualState = $this->execCmd();
     		//Pour réinitialiser l'enregistrement de l'historique
     		$this->setCollectDate('');
+        $outputStatus = $actualState;
         $actualTemp = $this->getEqLogic()->getCmd(null, 'associatedTemperatureSensor')->execCmd();
         $cmdSetPoint = $this->getEqLogic()->getCmd(null, 'adjustedSetPoint');
         if ($actualState && $cmdSetPoint->getConfiguration('RefTemp') > $actualTemp) {
