@@ -1,11 +1,11 @@
 [panel,danger]
-.Le calcul du pourcentage d'ajustement ne fonctionne pas
+. The calculation of the percentage of adjustment does not work
 --
-J'ai rencontré des problème avec l'utilisation de min et max. Dans les valeurs a tester par min/max,
-il ne faut pas que deux parenthèses soient l'une derrière l'autre, donc "((" par exemple est a proscrire.
-J'ai rencontré le même genre de problème avec round.
-Exemple non valide :
+I have encountered problems with using min and max. In the values to be tested by min / max,
+It is not necessary that two parentheses be one behind the other, therefore "(" for example is to be proscribed.
+I encountered the same kind of problem with round.
+Not valid sample
 round (12+(3*2),1)
-Exemple valide :
+Valid sample
 round (12+min(3*2,85496),1)
 --

@@ -6,7 +6,7 @@ include::presentation.asciidoc[]
 include::configuration.asciidoc[]
 
 '''
-== Paramétrage
+== Setting
 include::parametrage.asciidoc[]
 
 '''
@@ -14,7 +14,7 @@ include::parametrage.asciidoc[]
 include::faq.asciidoc[]
 
 '''
-== Troubleshoting
+== Troubleshooting
 include::troubleshoting.asciidoc[]
 
 
