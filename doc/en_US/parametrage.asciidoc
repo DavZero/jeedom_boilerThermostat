@@ -56,7 +56,7 @@ Enfin on peut également définir des modes sur le thermostat comme par exemple 
 
 La partie la plus interessante du thermostat concerne le champ "Consigne ajustée" qui expose une formule permettant de calculé la consigne appliqué.
 
-Par defaut la formule est : #ID_CONSIGNE#-#ID_MANAGER_ADJUST#*0.03
+Default formula is : #ID_CONSIGNE#-#ID_MANAGER_ADJUST#*0.03
 
 Cette formule signifie que la consigne appliquée correspond à la consigne défini sur le thermostat
 à laquel on soustrait une valeur comprise entre 0° et 3° (cf pourcentage d'ajustement sur le manager).
