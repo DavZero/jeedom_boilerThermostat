@@ -1,4 +1,4 @@
-==== Chauffage centrale
+==== Central Heating
 
 Ce plugin permet la gestion du chauffage centrale en multizone.
 Lorsque le thermostat d'une zone detecte que la température n'est pas suffisante, il active la chaudière.
