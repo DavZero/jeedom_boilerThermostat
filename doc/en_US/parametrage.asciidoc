@@ -1,6 +1,6 @@
 ==== Setting
 
-Lors de la création d'un thermostat (ou directement en sélectionnant Création Manager), un equipement spécifique se créer.
+When creating a thermostat (or directly by selecting Create Manager), A specific equipment is created.
 On ne peut créer qu'un seul manager.
 
 image::../images/boilerThermostat_screenshot4.JPG[]
