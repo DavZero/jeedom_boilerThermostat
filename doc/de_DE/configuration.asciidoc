@@ -1,4 +1,4 @@
-==== Configuration du plugin
+==== Plugin Konfiguration
 
 Une fois le plugin activé, il faut définir les actions permettant de mettre la chaudière en route ou de l'éteindre:
 
