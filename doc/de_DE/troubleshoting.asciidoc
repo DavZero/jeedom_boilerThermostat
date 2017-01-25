@@ -4,8 +4,8 @@
 J'ai rencontré des problème avec l'utilisation de min et max. Dans les valeurs a tester par min/max,
 il ne faut pas que deux parenthèses soient l'une derrière l'autre, donc "((" par exemple est a proscrire.
 J'ai rencontré le même genre de problème avec round.
-Exemple non valide :
+Ungültige Beispiel :
 round (12+(3*2),1)
-Exemple valide :
+Gültiges Beispiel :
 round (12+min(3*2,85496),1)
 --

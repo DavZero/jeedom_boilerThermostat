@@ -34,7 +34,7 @@ par Owntracks)
 TIP: Un controle est fait par le plugin pour que le resultat du calcul soit compris entre 0 et 100. Si le resultat du calcul est inférieur à 0, la valeur 0 est retenu et si le calcul donne un resultat supérieur à 100, la valeur 100 est retenu
 
 
-==== Paramétrage des thermostats
+==== Thermostate Einstellung
 
 Il faut commencer par créer un thermostat.
 On peut créer autant de thermostat qu'on le souhaite

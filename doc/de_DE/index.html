@@ -428,7 +428,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <li><a href="#_einrichtung">3. Einrichtung</a>
 <ul class="sectlevel3">
 <li><a href="#_paramétrage_du_manager">3.1. Paramétrage du "Manager"</a></li>
-<li><a href="#_paramétrage_des_thermostats">3.2. Paramétrage des thermostats</a></li>
+<li><a href="#_thermostate_einstellung">3.2. Thermostate Einstellung</a></li>
 </ul>
 </li>
 <li><a href="#_faq">4. FAQ</a></li>
@@ -465,7 +465,7 @@ Lorsque le thermostat d&#8217;une zone detecte que la température n&#8217;est p
 </ul>
 </div>
 <div class="sect4">
-<h5 id="_principe_de_régulation">Principe de régulation</h5>
+<h5 id="_prinzip_der_regelung">Prinzip der Regelung</h5>
 <div class="paragraph">
 <p>Les Thermostats fonctionnent en mode hystéresis avec une prise en compte de l&#8217;inertie de la pièce.
 Voici un graphique présentant le fonctionnement d&#8217;un thermostat avec hystérésis :</p>
@@ -638,7 +638,7 @@ Un controle est fait par le plugin pour que le resultat du calcul soit compris e
 </div>
 </div>
 <div class="sect3">
-<h4 id="_paramétrage_des_thermostats">3.2. Paramétrage des thermostats</h4>
+<h4 id="_thermostate_einstellung">3.2. Thermostate Einstellung</h4>
 <div class="paragraph">
 <p>Il faut commencer par créer un thermostat.
 On peut créer autant de thermostat qu&#8217;on le souhaite</p>
@@ -742,9 +742,9 @@ A priori vous n&#8217;avez pas a toucher à la formule de calcul, elle est toute
 <p>J&#8217;ai rencontré des problème avec l&#8217;utilisation de min et max. Dans les valeurs a tester par min/max,
 il ne faut pas que deux parenthèses soient l&#8217;une derrière l&#8217;autre, donc "((" par exemple est a proscrire.
 J&#8217;ai rencontré le même genre de problème avec round.
-Exemple non valide :
+Ungültige Beispiel :
 round (12+(3*2),1)
-Exemple valide :
+Gültiges Beispiel :
 round (12+min(3*2,85496),1)</p>
 </div>
 </div>

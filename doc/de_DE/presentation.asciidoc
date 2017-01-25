@@ -8,7 +8,7 @@ Il est possible de généré deux type d'equipement :
  * Des thermostats, utilisés pour la gestion de la consigne et de la température
  * Un manager, utilisé pour des actions global sur le chauffage (présence, On/Off global, ...)
 
-===== Principe de régulation
+===== Prinzip der Regelung
 
 Les Thermostats fonctionnent en mode hystéresis avec une prise en compte de l'inertie de la pièce.
 Voici un graphique présentant le fonctionnement d'un thermostat avec hystérésis :
