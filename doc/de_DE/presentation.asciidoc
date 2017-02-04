@@ -1,23 +1,23 @@
-==== Chauffage centrale
+==== Heizungs Zentrale
 
-Ce plugin permet la gestion du chauffage centrale en multizone.
-Lorsque le thermostat d'une zone detecte que la température n'est pas suffisante, il active la chaudière.
+Dieses Plugin ermöglicht die zentrale Verwaltung der Heizung in Multizonen.
+Wenn eine Thermostat-Zone erkennt, dass die Temperatur nicht ausreicht, wird der Boiler aktiviert. 
 
-Il est possible de généré deux type d'equipement :
+Es werden zwei mögliche Geräte Typen erzeugt :
 
- * Des thermostats, utilisés pour la gestion de la consigne et de la température
- * Un manager, utilisé pour des actions global sur le chauffage (présence, On/Off global, ...)
+ * Das Thermostat, verwendet für die Steuerung der Sollwerte und der Temperatur
+ * Ein Manager, verwendet für die globalen Aktionen auf die Heizung (Präsenz, insgesamt Ein/Aus, ...)
 
 ===== Prinzip der Regelung
 
-Les Thermostats fonctionnent en mode hystéresis avec une prise en compte de l'inertie de la pièce.
-Voici un graphique présentant le fonctionnement d'un thermostat avec hystérésis :
+Die Thermostate arbeiten im Hysterese-Modus mit der Berücksichtigung der Trägheit des Raumes.
+Hier ist ein Diagramm, das den Betrieb von einem Thermostat mit Hysterese zeigt :
 
 image::../images/hysteresis.png[]
 
 Ce mode de régulation fonctionne mais à la desavantage de s'écarter de la consigne même au dela du réglage de l'hystérésis.
 
-TIP: En réglant la valeur d'inertie à 0% sur un thermostat, c'est ce fonctionnement qui est obtenu.
+TIP: Durch die Einstellung des Trägheitswert auf 0% am Thermostat, erreicht man dass das Funktioniert.
 
 Afin d'améliorer ce principe, un paramètre d'inertie est a défini sur chaque thermostat en fonction de l'interie de la pièce a chauffer.
 Plus la pièce est lente a chauffer, plus il faut mettre une grande valeur.

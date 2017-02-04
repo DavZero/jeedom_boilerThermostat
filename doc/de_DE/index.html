@@ -417,7 +417,7 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <ul class="sectlevel1">
 <li><a href="#_beschreibung">1. Beschreibung</a>
 <ul class="sectlevel3">
-<li><a href="#_chauffage_centrale">1.1. Chauffage centrale</a></li>
+<li><a href="#_heizungs_zentrale">1.1. Heizungs Zentrale</a></li>
 </ul>
 </li>
 <li><a href="#_konfiguration">2. Konfiguration</a>
@@ -446,29 +446,29 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h2 id="_beschreibung">1. Beschreibung</h2>
 <div class="sectionbody">
 <div class="sect3">
-<h4 id="_chauffage_centrale">1.1. Chauffage centrale</h4>
+<h4 id="_heizungs_zentrale">1.1. Heizungs Zentrale</h4>
 <div class="paragraph">
-<p>Ce plugin permet la gestion du chauffage centrale en multizone.
-Lorsque le thermostat d&#8217;une zone detecte que la température n&#8217;est pas suffisante, il active la chaudière.</p>
+<p>Dieses Plugin ermöglicht die zentrale Verwaltung der Heizung in Multizonen.
+Wenn eine Thermostat-Zone erkennt, dass die Temperatur nicht ausreicht, wird der Boiler aktiviert.</p>
 </div>
 <div class="paragraph">
-<p>Il est possible de généré deux type d&#8217;equipement :</p>
+<p>Es werden zwei mögliche Geräte Typen erzeugt :</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Des thermostats, utilisés pour la gestion de la consigne et de la température</p>
+<p>Das Thermostat, verwendet für die Steuerung der Sollwerte und der Temperatur</p>
 </li>
 <li>
-<p>Un manager, utilisé pour des actions global sur le chauffage (présence, On/Off global, &#8230;&#8203;)</p>
+<p>Ein Manager, verwendet für die globalen Aktionen auf die Heizung (Präsenz, insgesamt Ein/Aus, &#8230;&#8203;)</p>
 </li>
 </ul>
 </div>
 <div class="sect4">
 <h5 id="_prinzip_der_regelung">Prinzip der Regelung</h5>
 <div class="paragraph">
-<p>Les Thermostats fonctionnent en mode hystéresis avec une prise en compte de l&#8217;inertie de la pièce.
-Voici un graphique présentant le fonctionnement d&#8217;un thermostat avec hystérésis :</p>
+<p>Die Thermostate arbeiten im Hysterese-Modus mit der Berücksichtigung der Trägheit des Raumes.
+Hier ist ein Diagramm, das den Betrieb von einem Thermostat mit Hysterese zeigt :</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -485,7 +485,7 @@ Voici un graphique présentant le fonctionnement d&#8217;un thermostat avec hyst
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-En réglant la valeur d&#8217;inertie à 0% sur un thermostat, c&#8217;est ce fonctionnement qui est obtenu.
+Durch die Einstellung des Trägheitswert auf 0% am Thermostat, erreicht man dass das Funktioniert.
 </td>
 </tr>
 </table>
@@ -724,9 +724,9 @@ A priori vous n&#8217;avez pas a toucher à la formule de calcul, elle est toute
 <h2 id="_faq">4. FAQ</h2>
 <div class="sectionbody">
 <div class="openblock panel">
-<div class="title">Le plugin nécessite t il des prérequis ?</div><div class="content">
+<div class="title">Welche Voraussetzungen erfordert das Plugin?</div><div class="content">
 <div class="paragraph">
-<p>Non, mais pour une utilisation plus économique, le plugin a besoin de votre géolocalisation (ou a minima de connaitre l&#8217;état de présence/absence).</p>
+<p>Keine, aber für eine wirtschaftlichere Nutzung des Plugins benötigt es Ihre Ortsbestimmung (oder zumindest den Zustand der An-/ Abwesenheit zu kennen).</p>
 </div>
 </div>
 </div>
@@ -737,15 +737,15 @@ A priori vous n&#8217;avez pas a toucher à la formule de calcul, elle est toute
 <h2 id="_fehlersuche">5. Fehlersuche</h2>
 <div class="sectionbody">
 <div class="openblock panel">
-<div class="title">Le calcul du pourcentage d&#8217;ajustement ne fonctionne pas</div><div class="content">
+<div class="title">Die Berechnung des Prozentsatzes der Anpassung funktioniert nicht !</div><div class="content">
 <div class="paragraph">
-<p>J&#8217;ai rencontré des problème avec l&#8217;utilisation de min et max. Dans les valeurs a tester par min/max,
-il ne faut pas que deux parenthèses soient l&#8217;une derrière l&#8217;autre, donc "((" par exemple est a proscrire.
-J&#8217;ai rencontré le même genre de problème avec round.
+<p>Ich bin auf ein Problem mit der Benutzung von min und max gestoßen. In einem Test der Werte min / max,
+es dürfen nicht zwei Klammern sein, eine hinter der anderen, deshalb ist zum Beispiel "((" verboten.
+Ich traf auf die gleiche Art von Problem mit Runden.
 Ungültige Beispiel :
-round (12+(3*2),1)
+runden (12+(3*2),1)
 Gültiges Beispiel :
-round (12+min(3*2,85496),1)</p>
+runden (12+min(3*2,85496),1)</p>
 </div>
 </div>
 </div>

@@ -1,5 +1,5 @@
 [panel,primary]
-.Le plugin nécessite t il des prérequis ?
+.Welche Voraussetzungen erfordert das Plugin?
 --
-Non, mais pour une utilisation plus économique, le plugin a besoin de votre géolocalisation (ou a minima de connaitre l'état de présence/absence).
+Keine, aber für eine wirtschaftlichere Nutzung des Plugins benötigt es Ihre Ortsbestimmung (oder zumindest den Zustand der An-/ Abwesenheit zu kennen).
 --

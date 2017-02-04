@@ -1,11 +1,11 @@
 [panel,danger]
-.Le calcul du pourcentage d'ajustement ne fonctionne pas
+.Die Berechnung des Prozentsatzes der Anpassung funktioniert nicht !
 --
-J'ai rencontré des problème avec l'utilisation de min et max. Dans les valeurs a tester par min/max,
-il ne faut pas que deux parenthèses soient l'une derrière l'autre, donc "((" par exemple est a proscrire.
-J'ai rencontré le même genre de problème avec round.
+Ich bin auf ein Problem mit der Benutzung von min und max gestoßen. In einem Test der Werte min / max,
+es dürfen nicht zwei Klammern sein, eine hinter der anderen, deshalb ist zum Beispiel "((" verboten.
+Ich traf auf die gleiche Art von Problem mit Runden. 
 Ungültige Beispiel :
-round (12+(3*2),1)
+runden (12+(3*2),1)
 Gültiges Beispiel :
-round (12+min(3*2,85496),1)
+runden (12+min(3*2,85496),1)
 --
