@@ -1,4 +1,4 @@
-==== Paramétrage du "Manager"
+==== Einsrichtung vom "Manager"
 
 Lors de la création d'un thermostat (ou directement en sélectionnant Création Manager), un equipement spécifique se créer.
 On ne peut créer qu'un seul manager.
