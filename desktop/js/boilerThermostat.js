@@ -247,6 +247,12 @@ function addActuator(_action, _name, _el) {
     div += '<option value="2">{{Off}}</option>'
     div += '</select>';
     div += '</div>';
+    if (init(_action.type) == 0)
+    {
+      div += '<div class="col-sm-6 ' + input + '">';
+      div += '<input type="number" class="expressionAttr input-sm" data-l1key="offset" step="0.1" min="-5" max="5" value="0"/>';
+      div += '</div>';
+    }
     div += '</div>';
     div += '</div>';
 
@@ -292,10 +298,8 @@ function addCmdToTable(_cmd) {
 
   tr += '<td style="width : 200px;">';
   if (init(_cmd.type) == 'info' && (init(_cmd.subType) == 'numeric' ||init(_cmd.subType) == 'binary')) {
-    //tr += '<span><input type="checkbox" class="cmdAttr bootstrapSwitch" data-size="mini" data-l1key="isHistorized" data-label-text="{{Historiser}}" /></span> ';
     tr += '<label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-l1key="isHistorized" checked/>{{Historiser}}</label>';
   }
-  //tr += '<span><input type="checkbox" class="cmdAttr bootstrapSwitch" data-size="mini" data-l1key="isVisible" data-label-text="{{Afficher}}" checked/></span> ';
   tr += '<label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-l1key="isVisible" checked/>{{Afficher}}</label>';
   if (init(_cmd.subType) == 'numeric') {
     tr += '<input class="tooltips cmdAttr form-control input-sm" data-size="mini" data-l1key="configuration" data-l2key="minValue" placeholder="{{Min}}" title="{{Min}}" style="width : 40%;display : inline-block;"> ';

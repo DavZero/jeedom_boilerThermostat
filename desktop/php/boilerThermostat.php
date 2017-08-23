@@ -142,14 +142,10 @@ $eqLogicsManager = eqLogic::byTypeAndSearhConfiguration('boilerThermostat','Mana
                     <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isEnable" checked/>{{Activer}}</label>
                     <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isVisible" checked/>{{Visible}}</label>
                   </div>
-                  <!--<div class="col-sm-9">
-                  <input type="checkbox" class="eqLogicAttr bootstrapSwitch" data-label-text="{{Activer}}" data-l1key="isEnable" checked/>
-                  <input type="checkbox" class="eqLogicAttr bootstrapSwitch" data-label-text="{{Visible}}" data-l1key="isVisible" checked/>
-                </div>-->
-              </div>
-            </fieldset>
-          </form>
-        </div>
+                </div>
+              </fieldset>
+            </form>
+          </div>
         <div class="col-sm-6">
           <form class="form-horizontal">
             <fieldset>

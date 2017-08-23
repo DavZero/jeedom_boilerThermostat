@@ -529,9 +529,12 @@ class boilerThermostat extends eqLogic {
         if (!isset($action['type'])) $action['type'] = 0;
         //On gere les actionneurs sur consigne
         if ($action['type'] != $type) continue;
+        if (!isset($action['offset'])) $action['offset'] = 0;
+        $tmpOpt = $opts;
+        $tmpOpt['slider'] += $action['offset'];
         //Convertir array en string (json php)?
-        log::add('boilerThermostat','debug','Execution de la commande : '.$action['cmd']." avec les options ".json_encode($opts));
-        scenarioExpression::createAndExec('action', $action['cmd'],$opts);
+        log::add('boilerThermostat','debug','Execution de la commande : '.$action['cmd']." avec les options ".json_encode($tmpOpt));
+        scenarioExpression::createAndExec('action', $action['cmd'],$tmpOpt);
       }
     }
   }
