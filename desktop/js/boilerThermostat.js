@@ -228,19 +228,13 @@ function addActuator(_action, _name, _el) {
     var button = 'btn-default';
 
     var div = '<div class="childActuator">';
-    div += '<div class="form-group ">';
-    div += '<label class="col-sm-1 control-label">' + _name + '</label>';
-    div += '<div class="col-sm-6 ' + input + '">';
-    div += '<div class="input-group">';
-    div += '<span class="input-group-btn">';
+    div += '<div style="display:flex;flex-direction: row" class="col-sm-8">';
+    div += '<label class="col-sm-2 control-label">' + _name + '</label>';
     div += '<a class="btn btn-default bt_removeAction btn-sm"><i class="fa fa-minus-circle"></i></a>';
-    div += '</span>';
     div += '<input class="expressionAttr form-control input-sm cmdAction" data-l1key="cmd"/>';
-    div += '<span class="input-group-btn">';
     div += '<a class="btn ' + button + ' btn-sm listCmdChildActuatorAction"><i class="fa fa-list-alt"></i></a>';
-    div += '</span>';
     div += '<label class="col-sm-1 control-label">' + 'type' + '</label>';
-    div += '<div class="col-sm-6 ' + input + '">';
+    div += '<div class="col-sm-3">';
     div += '<select class="expressionAttr input-sm form-control" data-l1key="type">';
     div += '<option value="0">{{Consigne}}</option>'
     div += '<option value="1">{{On}}</option>'
@@ -249,13 +243,9 @@ function addActuator(_action, _name, _el) {
     div += '</div>';
     if (init(_action.type) == 0)
     {
-      div += '<div class="col-sm-6 ' + input + '">';
+      div += '<label class="col-sm-1 control-label">offset</label>';
       div += '<input type="number" class="expressionAttr input-sm" data-l1key="offset" step="0.1" min="-5" max="5" value="0"/>';
-      div += '</div>';
     }
-    div += '</div>';
-    div += '</div>';
-
     div += '</div>';
     div += '</div>';
     if (isset(_el)) {

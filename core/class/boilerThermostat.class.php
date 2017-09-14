@@ -622,7 +622,7 @@ public function postSave() {
 }*/
 
 public function postAjax() {
-  if ($this->getConfiguration('type') == 'Manager') return;
+  if ($this->getConfiguration('type') != 'Thermostat') return;
   else $this->manageCmdOrder();
 }
 
