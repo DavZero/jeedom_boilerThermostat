@@ -188,29 +188,15 @@ function addMode(_mode,_el){
   //var button = 'btn-default';
 
   var div = '<div class="mode">';
-  div += '<div class="form-group ">';
-  div += '<label class="col-sm-1 control-label">' + _mode.name + '</label>';
+  div += '<div class="col-sm-8">';
+  div += '<label class="col-sm-2 control-label">' + _mode.name + '</label>';
   //div += '<div class="col-sm-4 ' + input + '">';
 
-  div += '<div class="col-sm-4">';
-  div += '<div class="input-group">';
-  div += '<div style="display: none;">';
-  div += '<input class="expressionAttr col-sm-1" data-l1key="name"/>';
-  div += '</div>';
-  div += '<span class="input-group-btn">';
+  div += '<div style="display:flex;flex-direction: row" class="col-sm-4">';
+  div += '<input class="expressionAttr col-sm-1" style="display: none;" data-l1key="name"/>';
   div += '<a class="btn btn-default bt_removeAction btn-sm"><i class="fa fa-minus-circle"></i></a>';
-  div += '</span>';
   div += '<input type="number" class="expressionAttr input-sm" data-l1key="option" step="0.5" min="10" max="25" value="19"/>';
-  //div += '<input class="expressionAttr form-control input-sm cmdAction" data-l1key="cmd"/>';
-  //div += '<span class="input-group-btn">';
-  //div += '<a class="btn ' + button + ' btn-sm listCmdActionSlider"><i class="fa fa-list-alt"></i></a>';
-  //div += '</span>';
-  //div += '</div>';
   div += '</div>';
-  div += '</div>';
-  //div += '<div class="col-sm-7 actionOptions">';
-  //div += jeedom.cmd.displayActionOption(init(_action.cmd, ''), _action.options);
-  //div += '</div>';
   div += '</div>';
   div += '</div>';
   if (isset(_el)) {
@@ -228,12 +214,14 @@ function addActuator(_action, _name, _el) {
     var button = 'btn-default';
 
     var div = '<div class="childActuator">';
-    div += '<div style="display:flex;flex-direction: row" class="col-sm-8">';
+    div += '<div class="col-sm-8">';
     div += '<label class="col-sm-2 control-label">' + _name + '</label>';
+    div += '<div style="display:flex;flex-direction: row" class="col-sm-4">';
     div += '<a class="btn btn-default bt_removeAction btn-sm"><i class="fa fa-minus-circle"></i></a>';
     div += '<input class="expressionAttr form-control input-sm cmdAction" data-l1key="cmd"/>';
     div += '<a class="btn ' + button + ' btn-sm listCmdChildActuatorAction"><i class="fa fa-list-alt"></i></a>';
-    div += '<label class="col-sm-1 control-label">' + 'type' + '</label>';
+    div += '</div>';
+    div += '<label class="col-sm-1 control-label">' + 'Type' + '</label>';
     div += '<div class="col-sm-3">';
     div += '<select class="expressionAttr input-sm form-control" data-l1key="type">';
     div += '<option value="0">{{Consigne}}</option>'
@@ -243,7 +231,7 @@ function addActuator(_action, _name, _el) {
     div += '</div>';
     if (init(_action.type) == 0)
     {
-      div += '<label class="col-sm-1 control-label">offset</label>';
+      div += '<label class="col-sm-1 control-label">Offset</label>';
       div += '<input type="number" class="expressionAttr input-sm" data-l1key="offset" step="0.1" min="-5" max="5" value="0"/>';
     }
     div += '</div>';
