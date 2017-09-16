@@ -814,7 +814,7 @@ class boilerThermostatCmd extends cmd {
         if ($inertiaFactor < 0) $inertiaFactor = 0;
         if ($inertiaFactor > 90) $inertiaFactor = 90;
 
-        log::add('boilerThermostat','debug','ActualState : '.$actualState.', consigne : '.$actualSetPoint.
+        log::add('boilerThermostat','debug','Thermostat : ' . $this->getEqLogic()->getHumanName() . ', ActualState : '.$actualState.', consigne : '.$actualSetPoint.
         ', temp '.$actualTemp.', hyst : '.$hysteresis.', RefTemp : '.$cmdSetPoint->getConfiguration('RefTemp').
         ', tendance : '.($cmdSetPoint->getConfiguration('RefTemp')-$actualTemp>0?'down':'up').
         ', coéfficent d\'inertie : '.$inertiaFactor. '%'.', mode : '.$mode);
@@ -824,10 +824,10 @@ class boilerThermostatCmd extends cmd {
 
         if (!$actualState)
         {
-          log::add('boilerThermostat','info','Calcul status ==> Température pour chauffer : '.$startHeatingTemp);
+          log::add('boilerThermostat','info','Thermostat : ' . $this->getEqLogic()->getHumanName() . ', Calcul status ==> Température pour chauffer : '.$startHeatingTemp);
         }
         else {
-          log::add('boilerThermostat','info','Calcul status ==> Température pour arreter : '.$stopHeatingTemp);
+          log::add('boilerThermostat','info','Thermostat : ' . $this->getEqLogic()->getHumanName() . ', Calcul status ==> Température pour arreter : '.$stopHeatingTemp);
         }
 
         //Check if heating is necessary
