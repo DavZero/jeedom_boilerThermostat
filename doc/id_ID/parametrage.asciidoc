@@ -48,6 +48,7 @@ Il faut configuer la sonde de température associée, ainsi que l'hystéresis et
 TIP: L'inertie permet d'anticipé la mise en route / l'arret de la chaudière. Par défaut la valeur de l'inertie est a 0 ce qui signifie pas d'inertie. Plus la pièce a d'inertie, plus il faut mettre une valeur élevé. Les valeurs limites sont de 0 à 90 (en dessous, on retient 0 et au dessus, on retient 90).
 
 Si on le souhaite, on peut également définir des actionneurs qui permettent de transmettre l'ordre de consigne ou l'ordre de mise en route ou d'arret (respectivement les type "Consigne","On","Off" du paramétrage) lorsque l'information correspondante change.
+Dans le cas ou le type de l'actionneur est consigne, le paramétrage permet de definir un offset entre la consigne de l'actionneur et la consigne du thermostat (ceci afin de palier à une différence de mesure de température entre l'actionneur et la sonde associé au thermostat)
 
 TIP: Ils peuvent être utilisés pour n'importe quel action Jeedom, mais ont été conçu afin de transmettre la consigne a des têtes thermostatique domotisé ou a des actionneurs type On/Off.
 
