@@ -1,0 +1,5 @@
+[panel,primary]
+. Does the plugin require prerequisites?
+--
+No, but for a more economical use, the plugin needs your geolocation (or at least to know the state of presence / absence).
+--

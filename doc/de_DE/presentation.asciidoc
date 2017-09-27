@@ -1,0 +1,31 @@
+==== Heizungs Zentrale
+
+Dieses Plugin ermöglicht die zentrale Verwaltung der Heizung in Multizonen.
+Wenn eine Thermostat-Zone erkennt, dass die Temperatur nicht ausreicht, wird der Boiler aktiviert. 
+
+Es werden zwei mögliche Geräte Typen erzeugt :
+
+ * Das Thermostat, verwendet für die Steuerung der Sollwerte und der Temperatur
+ * Ein Manager, verwendet für die globalen Aktionen auf die Heizung (Präsenz, insgesamt Ein/Aus, ...)
+
+===== Prinzip der Regelung
+
+Die Thermostate arbeiten im Hysterese-Modus mit der Berücksichtigung der Trägheit des Raumes.
+Hier ist ein Diagramm, das den Betrieb von einem Thermostat mit Hysterese zeigt :
+
+image::../images/hysteresis.png[]
+
+Ce mode de régulation fonctionne mais à la desavantage de s'écarter de la consigne même au dela du réglage de l'hystérésis.
+
+TIP: Durch die Einstellung des Trägheitswert auf 0% am Thermostat, erreicht man dass das Funktioniert.
+
+Afin d'améliorer ce principe, un paramètre d'inertie est a défini sur chaque thermostat en fonction de l'interie de la pièce a chauffer.
+Plus la pièce est lente a chauffer, plus il faut mettre une grande valeur.
+
+Cette inertie va être utilisé afin de declencher le chauffage avant d'atteindre la température Consigne-Hystérésis, ceci va permettre de rester au plus proche de la consigne cible et surtout de ne pas descendre sous la température Consigne-Hystérésis
+De la même façon, ce paramètre va permettre d'arreter le chauffage avant d'atteindre la température Consigne+Hystérésis, ceci va permettre de rester au plus proche de la consigne cible et surtout de ne pas monter au dessus de la température Consigne+Hystérésis
+Voici un graphique présentant le fonctionnement d'un thermostat avec hystérésis et prise en compte de l'inertie. Sur celui ci la valeur d'inertie est environ de 70%
+
+image::../images/hysteresis-inertie.JPG[]
+
+TIP: Sur l'image ci dessus l'hystérésis est très important (1°C). Dans la réalité, je préconise de mettre un hystérésis de 0.5°C maximum et une inertie de 20% pour une petite pièce et de 60% pour de très grande pièces. Bien sur ces valeurs sont a adapter a votre système de chauffage

@@ -1,0 +1,5 @@
+[panel,primary]
+.Welche Voraussetzungen erfordert das Plugin?
+--
+Keine, aber für eine wirtschaftlichere Nutzung des Plugins benötigt es Ihre Ortsbestimmung (oder zumindest den Zustand der An-/ Abwesenheit zu kennen).
+--
