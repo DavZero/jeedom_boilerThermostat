@@ -1,0 +1,7 @@
+==== The plugin configuration
+
+Once the plugin is activated, must be defined the actions to put the boiler on or turn it off:
+
+image::../images/boilerThermostat_1.JPG[]
+
+TIP: The actions available in the drop-down list are all "binary" actions present in your Jeedom installation, which includes all On / Off actions

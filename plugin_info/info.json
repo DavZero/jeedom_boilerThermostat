@@ -1,0 +1,9 @@
+{
+	"id" : "boilerThermostat",
+	"name" : "Thermostat chaudière",
+	"description" : "Thermostat multizone pour chaudière",
+	"licence" : "AGPL",
+	"author" : "DavZero",
+	"require" : "2.4",
+	"category" : "wellness"
+}

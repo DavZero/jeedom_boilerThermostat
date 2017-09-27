@@ -1,0 +1,11 @@
+[panel,danger]
+.Die Berechnung des Prozentsatzes der Anpassung funktioniert nicht !
+--
+Ich bin auf ein Problem mit der Benutzung von min und max gestoßen. In einem Test der Werte min / max,
+es dürfen nicht zwei Klammern sein, eine hinter der anderen, deshalb ist zum Beispiel "((" verboten.
+Ich traf auf die gleiche Art von Problem mit Runden. 
+Ungültige Beispiel :
+runden (12+(3*2),1)
+Gültiges Beispiel :
+runden (12+min(3*2,85496),1)
+--
