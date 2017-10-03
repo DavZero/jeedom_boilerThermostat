@@ -1,7 +1,7 @@
 ==== The plugin configuration
 
-Once the plugin is activated, must be defined the actions to put the boiler on or turn it off:
+Une fois le plugin activé, il faut définir les actions permettant de mettre la chaudière en route ou de l'éteindre :
 
 image::../images/boilerThermostat_1.JPG[]
 
-TIP: The actions available in the drop-down list are all "binary" actions present in your Jeedom installation, which includes all On / Off actions
+TIP: Les actions disponibles dans la liste déroulante sont toutes les actions de type "binaire" présente dans votre installation Jeedom, ce qui comprend toutes les actions On/Off.

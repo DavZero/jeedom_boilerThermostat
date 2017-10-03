@@ -449,25 +449,25 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <h4 id="_heizungs_zentrale">1.1. Heizungs Zentrale</h4>
 <div class="paragraph">
 <p>Dieses Plugin ermöglicht die zentrale Verwaltung der Heizung in Multizonen.
-Wenn eine Thermostat-Zone erkennt, dass die Temperatur nicht ausreicht, wird der Boiler aktiviert.</p>
+Lorsque le thermostat d&#8217;une zone détecte que la température n&#8217;est pas suffisante, il active la chaudière.</p>
 </div>
 <div class="paragraph">
-<p>Es werden zwei mögliche Geräte Typen erzeugt :</p>
+<p>Il est possible de générer deux types d&#8217;équipement :</p>
 </div>
 <div class="ulist">
 <ul>
 <li>
-<p>Das Thermostat, verwendet für die Steuerung der Sollwerte und der Temperatur</p>
+<p>Des thermostats : utilisés pour la gestion de la consigne et de la température</p>
 </li>
 <li>
-<p>Ein Manager, verwendet für die globalen Aktionen auf die Heizung (Präsenz, insgesamt Ein/Aus, &#8230;&#8203;)</p>
+<p>Un manager : utilisé pour des actions globales sur le chauffage (présence, On/Off global, &#8230;&#8203;)</p>
 </li>
 </ul>
 </div>
 <div class="sect4">
 <h5 id="_prinzip_der_regelung">Prinzip der Regelung</h5>
 <div class="paragraph">
-<p>Die Thermostate arbeiten im Hysterese-Modus mit der Berücksichtigung der Trägheit des Raumes.
+<p>Les Thermostats fonctionnent en mode hystérésis avec une prise en compte de l&#8217;inertie de la pièce.
 Hier ist ein Diagramm, das den Betrieb von einem Thermostat mit Hysterese zeigt :</p>
 </div>
 <div class="imageblock">
@@ -476,7 +476,7 @@ Hier ist ein Diagramm, das den Betrieb von einem Thermostat mit Hysterese zeigt 
 </div>
 </div>
 <div class="paragraph">
-<p>Ce mode de régulation fonctionne mais à la desavantage de s&#8217;écarter de la consigne même au dela du réglage de l&#8217;hystérésis.</p>
+<p>Ce mode de régulation fonctionne mais a le désavantage de s&#8217;écarter de la consigne même au-delà du réglage de l&#8217;hystérésis.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -491,13 +491,13 @@ Durch die Einstellung des Trägheitswert auf 0% am Thermostat, erreicht man dass
 </table>
 </div>
 <div class="paragraph">
-<p>Afin d&#8217;améliorer ce principe, un paramètre d&#8217;inertie est a défini sur chaque thermostat en fonction de l&#8217;interie de la pièce a chauffer.
-Plus la pièce est lente a chauffer, plus il faut mettre une grande valeur.</p>
+<p>Afin d&#8217;améliorer ce principe, un paramètre d&#8217;inertie est à définir sur chaque thermostat en fonction de l&#8217;inertie de la pièce à chauffer.
+Plus la pièce est lente à chauffer, plus la valeur à mettre est grande.</p>
 </div>
 <div class="paragraph">
-<p>Cette inertie va être utilisé afin de declencher le chauffage avant d&#8217;atteindre la température Consigne-Hystérésis, ceci va permettre de rester au plus proche de la consigne cible et surtout de ne pas descendre sous la température Consigne-Hystérésis
-De la même façon, ce paramètre va permettre d&#8217;arreter le chauffage avant d&#8217;atteindre la température Consigne+Hystérésis, ceci va permettre de rester au plus proche de la consigne cible et surtout de ne pas monter au dessus de la température Consigne+Hystérésis
-Voici un graphique présentant le fonctionnement d&#8217;un thermostat avec hystérésis et prise en compte de l&#8217;inertie. Sur celui ci la valeur d&#8217;inertie est environ de 70%</p>
+<p>Cette inertie va être utilisée afin de déclencher le chauffage avant d&#8217;atteindre la température Consigne-Hystérésis, ceci va permettre de rester au plus proche de la consigne cible et surtout de ne pas descendre sous la température Consigne-Hystérésis.
+De la même façon, ce paramètre va permettre d&#8217;arrêter le chauffage avant d&#8217;atteindre la température Consigne+Hystérésis, ceci va permettre de rester au plus proche de la consigne cible et surtout de ne pas dépasser la température Consigne+Hystérésis.
+Voici un graphique présentant le fonctionnement d&#8217;un thermostat avec hystérésis et prise en compte de l&#8217;inertie. Sur celui-ci la valeur d&#8217;inertie est environ de 70%.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -511,7 +511,7 @@ Voici un graphique présentant le fonctionnement d&#8217;un thermostat avec hyst
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-Sur l&#8217;image ci dessus l&#8217;hystérésis est très important (1°C). Dans la réalité, je préconise de mettre un hystérésis de 0.5°C maximum et une inertie de 20% pour une petite pièce et de 60% pour de très grande pièces. Bien sur ces valeurs sont a adapter a votre système de chauffage
+Sur l&#8217;image ci-dessus l&#8217;hystérésis est très importante (1°C). Dans la réalité, je préconise de mettre une hystérésis de 0,5°C maximum et une inertie de 20% pour une petite pièce et de 60% pour de très grandes pièces. Bien sur ces valeurs sont à adapter à votre système de chauffage.
 </td>
 </tr>
 </table>
@@ -527,7 +527,7 @@ Sur l&#8217;image ci dessus l&#8217;hystérésis est très important (1°C). Dan
 <div class="sect3">
 <h4 id="_plugin_konfiguration">2.1. Plugin Konfiguration</h4>
 <div class="paragraph">
-<p>Une fois le plugin activé, il faut définir les actions permettant de mettre la chaudière en route ou de l&#8217;éteindre:</p>
+<p>Une fois le plugin activé, il faut définir les actions permettant de mettre la chaudière en route ou de l&#8217;éteindre :</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -541,7 +541,7 @@ Sur l&#8217;image ci dessus l&#8217;hystérésis est très important (1°C). Dan
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-Les actions disponible dans la liste déroulante sont toutes les actions de type "binaire" présente dans votre installation Jeedom, ce qui comprend tout les actions On/Off
+Les actions disponibles dans la liste déroulante sont toutes les actions de type "binaire" présente dans votre installation Jeedom, ce qui comprend toutes les actions On/Off.
 </td>
 </tr>
 </table>
@@ -556,8 +556,8 @@ Les actions disponible dans la liste déroulante sont toutes les actions de type
 <div class="sect3">
 <h4 id="_einsrichtung_vom_manager">3.1. Einsrichtung vom "Manager"</h4>
 <div class="paragraph">
-<p>Lors de la création d&#8217;un thermostat (ou directement en sélectionnant Création Manager), un equipement spécifique se créer.
-On ne peut créer qu&#8217;un seul manager.</p>
+<p>Lors de la création d&#8217;un thermostat (ou directement en sélectionnant "Création Manager"), un équipement spécifique se crée.
+Il n&#8217;est possible de créer qu&#8217;un seul manager.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -571,16 +571,14 @@ On ne peut créer qu&#8217;un seul manager.</p>
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-Par defaut les commandes ne sont pas affichées, il faut cliquer sur le texte "Commandes" pour les voir apparaitre
+Par défaut les commandes ne sont pas affichées, il faut cliquer sur le texte "Commandes" pour les voir apparaitre.
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>Cet equipement permet de gérer un pourcentage qui affecte la température de consigne de tous les thermostats.
-L&#8217;objectif est de permettre de diminuer la température de consigne lorsque l&#8217;utilisateur (ou les utilisateurs) est absent mais également de l&#8217;adapter en fonction de la distance
-des habitants par rapport au domicile. Ainsi si je m&#8217;éloigne de mon domicile, la température de consigne diminue et si je me rapproche,
-la température de consigne remonte pour atteindre celle souhaité lorsque j&#8217;arrive a mon domicile.</p>
+<p>Cet équipement permet de gérer un pourcentage qui affecte la température de consigne de tous les thermostats.
+L&#8217;objectif est de permettre de diminuer la température de consigne lorsque l&#8217;utilisateur (ou les utilisateurs) est absent mais également de l&#8217;adapter en fonction de la distance des habitants par rapport au domicile. Ainsi si je m&#8217;éloigne de mon domicile, la température de consigne diminue et si je m&#8217;en rapproche, la température de consigne remonte pour atteindre celle souhaitée lorsque j&#8217;arrive à mon domicile.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -589,22 +587,22 @@ la température de consigne remonte pour atteindre celle souhaité lorsque j&#82
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-Ce pourcentage est ensuite utilisé sur chaque thermostats pour ajusté la consigne défini par l&#8217;utilsiateur : ConsigneRéelle = ConsigneDéfini-3*Pourcentage/100, ce qui fait que si on défini une consigne de 19°C mais qu&#8217;on s&#8217;eloigne suffisament de son domicile, la consigne peut être de 16°C en réalité.
-TIP: La valeur maximum d&#8217;ajustement est paramétrable sur chaque thermostat (3°C par defaut comme dans l&#8217;exemple ci dessus)
+Ce pourcentage est ensuite utilisé sur chaque thermostat pour ajuster la consigne définie par l&#8217;utilisateur : ConsigneRéelle = ConsigneDéfini-3*Pourcentage/100, ce qui fait que si on définit une consigne de 19°C mais que l&#8217;on s&#8217;éloigne suffisamment de son domicile, la consigne peut être de 16°C en réalité.
+TIP: La valeur maximale d&#8217;ajustement est paramétrable sur chaque thermostat (3°C par défaut comme dans l&#8217;exemple ci-dessus)
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>Il permet également de couper le chauffage correspondant au thermostat associé</p>
+<p>Il permet également de couper le chauffage correspondant au thermostat associé.</p>
 </div>
 <div class="paragraph">
-<p>Cet equipement contient donc 5 boutons :
-Absent qui force la valeur d&#8217;ajustement a 100%
-Présent qui force la valeur d&#8217;ajustement à 0%
-Auto qui utilise une formule de calcul pour determiner le pourcentage d&#8217;ajustement.
-On qui permet la prise en compte des thermostats associés
-Off qui permet de couper le chaffauge (les thermostats associés ne sont plus pris en compte)</p>
+<p>Cet équipement contient donc 5 boutons :
+Absent : qui force la valeur d&#8217;ajustement a 100%.
+Présent : qui force la valeur d&#8217;ajustement à 0%.
+Auto : qui utilise une formule de calcul pour déterminer le pourcentage d&#8217;ajustement.
+On : qui permet la prise en compte des thermostats associés.
+Off : qui permet de couper le chauffage (les thermostats associés ne sont plus pris en compte).</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -621,8 +619,7 @@ Par défaut la formule de calcul = 0.
 <div class="paragraph">
 <p>Exemple de formule :
 <mark>GEOLOC_TRAJET</mark>*5-<mark>OWNTRACKS_ACCURACY</mark>*0.005
-Cet exemple permet de calculer un pourcentage sur une distance de 20 km (en utilisant la distance de trajet retourner par le plugin geolocalsation et la précision de mesure défini
-par Owntracks)</p>
+Cet exemple permet de calculer un pourcentage sur une distance de 20 km (en utilisant la distance de trajet retournée par le plugin géolocalisation et la précision de mesure définie par Owntracks)</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -631,7 +628,7 @@ par Owntracks)</p>
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-Un controle est fait par le plugin pour que le resultat du calcul soit compris entre 0 et 100. Si le resultat du calcul est inférieur à 0, la valeur 0 est retenu et si le calcul donne un resultat supérieur à 100, la valeur 100 est retenu
+Un contrôle est fait par le plugin pour que le résultat du calcul soit compris entre 0 et 100. Si le résultat du calcul est inférieur à 0, la valeur 0 est retenue et si le calcul donne un résultat supérieur à 100, la valeur 100 est retenue.
 </td>
 </tr>
 </table>
@@ -641,7 +638,7 @@ Un controle est fait par le plugin pour que le resultat du calcul soit compris e
 <h4 id="_thermostate_einstellung">3.2. Thermostate Einstellung</h4>
 <div class="paragraph">
 <p>Il faut commencer par créer un thermostat.
-On peut créer autant de thermostat qu&#8217;on le souhaite</p>
+Il est possible de créer autant de thermostat que souhaité.</p>
 </div>
 <div class="imageblock">
 <div class="content">
@@ -655,13 +652,13 @@ On peut créer autant de thermostat qu&#8217;on le souhaite</p>
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-Par défaut les commandes ne sont pas affichées, il faut cliquer sur le texte "Commandes" pour les voir apparaitre
+Par défaut les commandes ne sont pas affichées, il faut cliquer sur le texte "Commandes" pour les voir apparaitre.
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>Il faut configuer la sonde de température associée, ainsi que l&#8217;hystéresis et si on le souhaite l&#8217;inertie.</p>
+<p>Il faut configurer la sonde de température associée, ainsi que l&#8217;hystérésis et si on le souhaite, l&#8217;inertie.</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -670,14 +667,14 @@ Par défaut les commandes ne sont pas affichées, il faut cliquer sur le texte "
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-L&#8217;inertie permet d&#8217;anticipé la mise en route / l&#8217;arret de la chaudière. Par défaut la valeur de l&#8217;inertie est a 0 ce qui signifie pas d&#8217;inertie. Plus la pièce a d&#8217;inertie, plus il faut mettre une valeur élevé. Les valeurs limites sont de 0 à 90 (en dessous, on retient 0 et au dessus, on retient 90).
+L&#8217;inertie permet d&#8217;anticiper la mise en route / l&#8217;arrêt de la chaudière. Par défaut la valeur de l&#8217;inertie est à 0 ce qui signifie qu&#8217;il n&#8217;y a pas d&#8217;inertie. Plus la pièce à d&#8217;inertie, plus il faut mettre une valeur élevée. Les valeurs limites sont de 0 à 90 (en dessous, la valeur 0 sera retenue et au-dessus, 90 sera retenue).
 </td>
 </tr>
 </table>
 </div>
 <div class="paragraph">
-<p>Si on le souhaite, on peut également définir des actionneurs qui permettent de transmettre l&#8217;ordre de consigne ou l&#8217;ordre de mise en route ou d&#8217;arret (respectivement les type "Consigne","On","Off" du paramétrage) lorsque l&#8217;information correspondante change.
-Dans le cas ou le type de l&#8217;actionneur est consigne, le paramétrage permet de definir un offset entre la consigne de l&#8217;actionneur et la consigne du thermostat (ceci afin de palier à une différence de mesure de température entre l&#8217;actionneur et la sonde associé au thermostat)</p>
+<p>Si on le souhaite, on peut également définir des actionneurs qui permettent de transmettre l&#8217;ordre de consigne ou l&#8217;ordre de mise en route ou d&#8217;arrêt (respectivement les types "Consigne","On","Off" du paramétrage) lorsque l&#8217;information correspondante change.
+Dans le cas où le type de l&#8217;actionneur est consigne, le paramétrage permet de definir un offset entre la consigne de l&#8217;actionneur et la consigne du thermostat (ceci afin de palier une différence de mesure de température entre l&#8217;actionneur et la sonde associée au thermostat).</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -686,7 +683,7 @@ Dans le cas ou le type de l&#8217;actionneur est consigne, le paramétrage perme
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-Ils peuvent être utilisés pour n&#8217;importe quel action Jeedom, mais ont été conçu afin de transmettre la consigne a des têtes thermostatique domotisé ou a des actionneurs type On/Off.
+Ils peuvent être utilisés pour n&#8217;importe quelle action Jeedom, mais ont été conçu afin de transmettre la consigne à des têtes thermostatiques domotisées ou à des actionneurs de type On/Off.
 </td>
 </tr>
 </table>
@@ -696,14 +693,13 @@ Ils peuvent être utilisés pour n&#8217;importe quel action Jeedom, mais ont é
 Enfin on peut également définir des modes sur le thermostat comme par exemple Confort ou Eco, il suffit pour cela de cliquer sur "Ajouter Mode" puis de définir un nom pour le mode ainsi qu&#8217;une température.</p>
 </div>
 <div class="paragraph">
-<p>La partie la plus interessante du thermostat concerne le champ "Consigne ajustée" qui expose une formule permettant de calculé la consigne appliqué.</p>
+<p>La partie la plus intéressante du thermostat concerne le champ "Consigne ajustée" qui expose une formule permettant de calculer la consigne appliquée.</p>
 </div>
 <div class="paragraph">
-<p>Par defaut la formule est : <mark>ID_CONSIGNE</mark>-<mark>ID_MANAGER_ADJUST</mark>*0.03</p>
+<p>Par défaut la formule est : <mark>ID_CONSIGNE</mark>-<mark>ID_MANAGER_ADJUST</mark>*0.03</p>
 </div>
 <div class="paragraph">
-<p>Cette formule signifie que la consigne appliquée correspond à la consigne défini sur le thermostat
-à laquel on soustrait une valeur comprise entre 0° et 3° (cf pourcentage d&#8217;ajustement sur le manager).</p>
+<p>Cette formule signifie que la consigne appliquée correspond à la consigne définie sur le thermostat à laquelle on soustrait une valeur comprise entre 0° et 3° (cf pourcentage d&#8217;ajustement sur le manager).</p>
 </div>
 <div class="admonitionblock tip">
 <table>
@@ -712,7 +708,7 @@ Enfin on peut également définir des modes sur le thermostat comme par exemple 
 <i class="fa icon-tip" title="Tip"></i>
 </td>
 <td class="content">
-A priori vous n&#8217;avez pas a toucher à la formule de calcul, elle est toutefois éditable afin de vous permettre de regler la valeur maximum d&#8217;ajustement. Si par exemple vous souhaiter que la consigne ajoutée soit au maximum inférieur de 1.5°C par rapport à la consigne réelle, remplacer 0.03 dans la formule par 0.015
+A priori vous n&#8217;avez pas à toucher à la formule de calcul, elle est toutefois éditable afin de vous permettre de régler la valeur maximale d&#8217;ajustement. Si par exemple vous souhaitez que la consigne ajoutée soit au maximum inférieur de 1,5°C par rapport à la consigne réelle, remplacer 0.03 dans la formule par 0.015.
 </td>
 </tr>
 </table>
