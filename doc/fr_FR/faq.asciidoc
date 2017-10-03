@@ -5,5 +5,5 @@ Non, mais pour une utilisation plus économique, le plugin a besoin de votre gé
 --
 .Comment gérer l'état de présence/absence autrement qu'avec la géolocalisation ?
 --
-Il est possible d'utiliser le plugin agenda qui permettra de définir des plages de présence et d'absence qui vont piloter les états des thermostats.
+Il est possible d'utiliser le plugin agenda qui permettra de définir des plages de présence et d'absence, les actions de l'agenda piloteront les états des thermostats.
 --
