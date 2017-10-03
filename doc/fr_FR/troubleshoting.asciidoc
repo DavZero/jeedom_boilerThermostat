@@ -1,11 +1,14 @@
 [panel,danger]
 .Le calcul du pourcentage d'ajustement ne fonctionne pas
 --
-J'ai rencontré des problème avec l'utilisation de min et max. Dans les valeurs a tester par min/max,
-il ne faut pas que deux parenthèses soient l'une derrière l'autre, donc "((" par exemple est a proscrire.
+J'ai rencontré des problèmes avec l'utilisation de min et max. Dans les valeurs à tester par min/max, il ne faut pas que deux parenthèses soient l'une derrière l'autre, donc "((" par exemple est à proscrire.
 J'ai rencontré le même genre de problème avec round.
+
 Exemple non valide :
+
 round (12+(3*2),1)
+
 Exemple valide :
+
 round (12+min(3*2,85496),1)
 --
