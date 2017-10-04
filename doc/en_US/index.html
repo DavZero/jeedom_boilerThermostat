@@ -720,17 +720,17 @@ A priori vous n&#8217;avez pas à toucher à la formule de calcul, elle est tout
 <div class="sect1">
 <h2 id="_faq">4. FAQ</h2>
 <div class="sectionbody">
-<div class="olist panel">
-<ol class="panel">
-<li>
-<p>Does the plugin require prerequisites?</p>
-</li>
-</ol>
-</div>
-<div class="openblock">
-<div class="content">
+<div class="openblock panel">
+<div class="title">Le plugin nécessite-t-il des prérequis ?</div><div class="content">
 <div class="paragraph">
 <p>No, but for a more economical use, the plugin needs your geolocation (or at least to know the state of presence / absence).</p>
+</div>
+</div>
+</div>
+<div class="openblock">
+<div class="title">Comment gérer l&#8217;état de présence/absence autrement qu&#8217;avec la géolocalisation ?</div><div class="content">
+<div class="paragraph">
+<p>Il est possible d&#8217;utiliser le plugin agenda qui permettra de définir des plages de présence et d&#8217;absence, les actions de l&#8217;agenda piloteront les états des thermostats.</p>
 </div>
 </div>
 </div>
@@ -750,13 +750,20 @@ A priori vous n&#8217;avez pas à toucher à la formule de calcul, elle est tout
 <div class="openblock">
 <div class="content">
 <div class="paragraph">
-<p>I have encountered problems with using min and max. In the values to be tested by min / max,
-It is not necessary that two parentheses be one behind the other, therefore "(" for example is to be proscribed.
-I encountered the same kind of problem with round.
-Not valid sample
-round (12+(3*2),1)
-Valid sample
-round (12+min(3*2,85496),1)</p>
+<p>J&#8217;ai rencontré des problèmes avec l&#8217;utilisation de min et max. Dans les valeurs à tester par min/max, il ne faut pas que deux parenthèses soient l&#8217;une derrière l&#8217;autre, donc "((" par exemple est à proscrire.
+I encountered the same kind of problem with round.</p>
+</div>
+<div class="paragraph">
+<p>Not valid sample</p>
+</div>
+<div class="paragraph">
+<p>round (12+(3*2),1)</p>
+</div>
+<div class="paragraph">
+<p>Valid sample</p>
+</div>
+<div class="paragraph">
+<p>round (12+min(3*2,85496),1)</p>
 </div>
 </div>
 </div>

@@ -1,11 +1,14 @@
 [panel,danger]
 . The calculation of the percentage of adjustment does not work
 --
-I have encountered problems with using min and max. In the values to be tested by min / max,
-It is not necessary that two parentheses be one behind the other, therefore "(" for example is to be proscribed.
+J'ai rencontré des problèmes avec l'utilisation de min et max. Dans les valeurs à tester par min/max, il ne faut pas que deux parenthèses soient l'une derrière l'autre, donc "((" par exemple est à proscrire.
 I encountered the same kind of problem with round.
+
 Not valid sample
+
 round (12+(3*2),1)
+
 Valid sample
+
 round (12+min(3*2,85496),1)
 --
