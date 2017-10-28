@@ -842,7 +842,8 @@ class boilerThermostatCmd extends cmd {
             //$cmdSetPoint->save();
             $needSave=true;
             $this->getEqLogic()->processChildActuators(2);
-            $this->getEqLogic()->getCmd(null, 'statusName')->event(__('Off', __FILE__));
+            //$this->getEqLogic()->getCmd(null, 'statusName')->event(__('Off', __FILE__));
+            $this->getEqLogic()->CheckAndUpdateCmd('statusName',__('Off', __FILE__));
             $outputStatus = 0;
           }
         }
@@ -859,7 +860,8 @@ class boilerThermostatCmd extends cmd {
             //$cmdSetPoint->save();
             $needSave=true;
             $this->getEqLogic()->processChildActuators(1);
-            $this->getEqLogic()->getCmd(null, 'statusName')->event(__('Chauffage', __FILE__));
+            //$this->getEqLogic()->getCmd(null, 'statusName')->event(__('Chauffage', __FILE__));
+            $this->getEqLogic()->CheckAndUpdateCmd('statusName',__('Chauffage', __FILE__));
           }
           $outputStatus = 1;
         }
@@ -878,7 +880,8 @@ class boilerThermostatCmd extends cmd {
             //$cmdSetPoint->save();
             $needSave=true;
             $this->getEqLogic()->processChildActuators(2);
-            $this->getEqLogic()->getCmd(null, 'statusName')->event(__('Arrêté', __FILE__));
+            //$this->getEqLogic()->getCmd(null, 'statusName')->event(__('Arrêté', __FILE__));
+            $this->getEqLogic()->CheckAndUpdateCmd('statusName',__('Arrêté', __FILE__));
           }
           $outputStatus = 0;
         }
@@ -923,8 +926,10 @@ class boilerThermostatCmd extends cmd {
         {
           if ($th->getManager()->getId() != $this->getEqLogic()->getId() || !$th->getIsEnable()) continue;
           //Need manage when cmd doesn't exist??
-          $th->getCmd('info','status')->event($th->getCmd('info','status')->execute(),2);
-          $th->getCmd('info','adjustedSetPoint')->event($th->getCmd('info','adjustedSetPoint')->execute(),2);
+          $th->checkAndUpdateCmd('status',$th->getCmd('info','status')->execute());
+          //$th->getCmd('info','status')->event($th->getCmd('info','status')->execute(),2);
+          $th->checkAndUpdateCmd('adjustedSetPoint',$th->getCmd('info','adjustedSetPoint')->execute());
+          //$th->getCmd('info','adjustedSetPoint')->event($th->getCmd('info','adjustedSetPoint')->execute(),2);
         }
         break;
 
@@ -938,7 +943,8 @@ class boilerThermostatCmd extends cmd {
         {
           if ($th->getManager()->getId() != $this->getEqLogic()->getId() || !$th->getIsEnable()) continue;
           //Need manage when cmd doesn't exist??
-          $th->getCmd('info','status')->event($th->getCmd('info','status')->execute(),2);
+          //$th->getCmd('info','status')->event($th->getCmd('info','status')->execute(),2);
+          $th->checkAndUpdateCmd('status',$th->getCmd('info','status')->execute());
         }
         break;
 

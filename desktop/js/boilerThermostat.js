@@ -187,16 +187,12 @@ function addMode(_mode,_el){
   //var input = '';
   //var button = 'btn-default';
 
-  var div = '<div class="mode">';
-  div += '<div class="col-sm-8">';
-  div += '<label class="col-sm-2 control-label">' + _mode.name + '</label>';
-  //div += '<div class="col-sm-4 ' + input + '">';
-
-  div += '<div style="display:flex;flex-direction: row" class="col-sm-4">';
-  div += '<input class="expressionAttr col-sm-1" style="display: none;" data-l1key="name"/>';
+  var div = '<div class="form-group mode">';
+  div += '<label class="col-sm-1 control-label">' + _mode.name + '</label>';
+  div += '<div class="col-sm-2">';
+  div += '<input class="expressionAttr" style="display: none;" data-l1key="name"/>';
   div += '<a class="btn btn-default bt_removeAction btn-sm"><i class="fa fa-minus-circle"></i></a>';
   div += '<input type="number" class="expressionAttr input-sm" data-l1key="option" step="0.5" min="10" max="25" value="19"/>';
-  div += '</div>';
   div += '</div>';
   div += '</div>';
   if (isset(_el)) {
@@ -213,17 +209,16 @@ function addActuator(_action, _name, _el) {
     var input = '';
     var button = 'btn-default';
 
-    var div = '<div class="childActuator">';
-    div += '<div class="col-sm-8">';
-    div += '<label class="col-sm-2 control-label">' + _name + '</label>';
-    div += '<div style="display:flex;flex-direction: row" class="col-sm-4">';
+    var div = '<div class="childActuator form-group">';
+    div += '<label class="col-sm-1 control-label">' + _name + '</label>';
+    div += '<div class="col-sm-4">';
     div += '<a class="btn btn-default bt_removeAction btn-sm"><i class="fa fa-minus-circle"></i></a>';
-    div += '<input class="expressionAttr form-control input-sm cmdAction" data-l1key="cmd"/>';
+    div += '<input style="width:250px;" class="expressionAttr input-sm cmdAction" data-l1key="cmd"/>';
     div += '<a class="btn ' + button + ' btn-sm listCmdChildActuatorAction"><i class="fa fa-list-alt"></i></a>';
     div += '</div>';
     div += '<label class="col-sm-1 control-label">' + 'Type' + '</label>';
-    div += '<div class="col-sm-3">';
-    div += '<select class="expressionAttr input-sm form-control" data-l1key="type">';
+    div += '<div class="col-sm-1">';
+    div += '<select class="expressionAttr input-sm" data-l1key="type">';
     div += '<option value="0">{{Consigne}}</option>'
     div += '<option value="1">{{On}}</option>'
     div += '<option value="2">{{Off}}</option>'
@@ -232,9 +227,10 @@ function addActuator(_action, _name, _el) {
     if (init(_action.type) == 0)
     {
       div += '<label class="col-sm-1 control-label">Offset</label>';
+      div += '<div class="col-sm-1">';
       div += '<input type="number" class="expressionAttr input-sm" data-l1key="offset" step="0.1" min="-5" max="5" value="0"/>';
+      div += '</div>';
     }
-    div += '</div>';
     div += '</div>';
     if (isset(_el)) {
         _el.append(div);
