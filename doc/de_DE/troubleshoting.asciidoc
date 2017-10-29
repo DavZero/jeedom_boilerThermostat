@@ -1,0 +1,14 @@
+[panel,danger]
+.Die Berechnung des Prozentsatzes der Anpassung funktioniert nicht !
+--
+J'ai rencontré des problèmes avec l'utilisation de min et max. Dans les valeurs à tester par min/max, il ne faut pas que deux parenthèses soient l'une derrière l'autre, donc "((" par exemple est à proscrire.
+Ich traf auf die gleiche Art von Problem mit Runden. 
+
+Ungültige Beispiel :
+
+runden (12+(3*2),1)
+
+Gültiges Beispiel :
+
+runden (12+min(3*2,85496),1)
+--

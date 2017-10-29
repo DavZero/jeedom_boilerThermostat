@@ -1,0 +1,9 @@
+[panel,primary]
+.Le plugin nécessite-t-il des prérequis ?
+--
+Non, mais pour une utilisation plus économique, le plugin a besoin de votre géolocalisation (ou a minima de connaitre l'état de présence/absence).
+--
+.Comment gérer l'état de présence/absence autrement qu'avec la géolocalisation ?
+--
+Il est possible d'utiliser le plugin agenda qui permettra de définir des plages de présence et d'absence, les actions de l'agenda piloteront les états des thermostats.
+--

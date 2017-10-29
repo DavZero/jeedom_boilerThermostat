@@ -1,0 +1,31 @@
+==== Chauffage centrale
+
+Ce plugin permet la gestion du chauffage centrale en multizone.
+Lorsque le thermostat d'une zone détecte que la température n'est pas suffisante, il active la chaudière.
+
+Il est possible de générer deux types d'équipement :
+
+ * Des thermostats : utilisés pour la gestion de la consigne et de la température
+ * Un manager : utilisé pour des actions globales sur le chauffage (présence, On/Off global, ...)
+
+===== Principe de régulation
+
+Les Thermostats fonctionnent en mode hystérésis avec une prise en compte de l'inertie de la pièce.
+Voici un graphique présentant le fonctionnement d'un thermostat avec hystérésis :
+
+image::../images/hysteresis.png[]
+
+Ce mode de régulation fonctionne mais a le désavantage de s'écarter de la consigne même au-delà du réglage de l'hystérésis.
+
+TIP: En réglant la valeur d'inertie à 0% sur un thermostat, c'est ce fonctionnement qui est obtenu.
+
+Afin d'améliorer ce principe, un paramètre d'inertie est à définir sur chaque thermostat en fonction de l'inertie de la pièce à chauffer.
+Plus la pièce est lente à chauffer, plus la valeur à mettre est grande.
+
+Cette inertie va être utilisée afin de déclencher le chauffage avant d'atteindre la température Consigne-Hystérésis, ceci va permettre de rester au plus proche de la consigne cible et surtout de ne pas descendre sous la température Consigne-Hystérésis.
+De la même façon, ce paramètre va permettre d'arrêter le chauffage avant d'atteindre la température Consigne+Hystérésis, ceci va permettre de rester au plus proche de la consigne cible et surtout de ne pas dépasser la température Consigne+Hystérésis.
+Voici un graphique présentant le fonctionnement d'un thermostat avec hystérésis et prise en compte de l'inertie. Sur celui-ci la valeur d'inertie est environ de 70%.
+
+image::../images/hysteresis-inertie.JPG[]
+
+TIP: Sur l'image ci-dessus l'hystérésis est très importante (1°C). Dans la réalité, je préconise de mettre une hystérésis de 0,5°C maximum et une inertie de 20% pour une petite pièce et de 60% pour de très grandes pièces. Bien sur ces valeurs sont à adapter à votre système de chauffage.

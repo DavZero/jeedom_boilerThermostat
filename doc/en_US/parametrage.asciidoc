@@ -1,0 +1,61 @@
+==== Setting
+
+Lors de la création d'un thermostat (ou directement en sélectionnant "Création Manager"), un équipement spécifique se crée.
+Il n'est possible de créer qu'un seul manager.
+
+image::../images/boilerThermostat_screenshot4.JPG[]
+
+TIP: Par défaut les commandes ne sont pas affichées, il faut cliquer sur le texte "Commandes" pour les voir apparaitre.
+
+Cet équipement permet de gérer un pourcentage qui affecte la température de consigne de tous les thermostats.
+L'objectif est de permettre de diminuer la température de consigne lorsque l'utilisateur (ou les utilisateurs) est absent mais également de l'adapter en fonction de la distance des habitants par rapport au domicile. Ainsi si je m'éloigne de mon domicile, la température de consigne diminue et si je m'en rapproche, la température de consigne remonte pour atteindre celle souhaitée lorsque j'arrive à mon domicile.
+
+TIP: Ce pourcentage est ensuite utilisé sur chaque thermostat pour ajuster la consigne définie par l'utilisateur : ConsigneRéelle = ConsigneDéfini-3*Pourcentage/100, ce qui fait que si on définit une consigne de 19°C mais que l'on s'éloigne suffisamment de son domicile, la consigne peut être de 16°C en réalité.
+TIP: La valeur maximale d'ajustement est paramétrable sur chaque thermostat (3°C par défaut comme dans l'exemple ci-dessus)
+
+Il permet également de couper le chauffage correspondant au thermostat associé.
+
+Cet équipement contient donc 5 boutons :
+Absent : qui force la valeur d'ajustement a 100%.
+Présent : qui force la valeur d'ajustement à 0%.
+Auto : qui utilise une formule de calcul pour déterminer le pourcentage d'ajustement.
+On : qui permet la prise en compte des thermostats associés.
+Off : qui permet de couper le chauffage (les thermostats associés ne sont plus pris en compte).
+
+TIP: Par défaut la formule de calcul = 0.
+
+Exemple de formule :
+#GEOLOC_TRAJET#*5-#OWNTRACKS_ACCURACY#*0.005
+Cet exemple permet de calculer un pourcentage sur une distance de 20 km (en utilisant la distance de trajet retournée par le plugin géolocalisation et la précision de mesure définie par Owntracks)
+
+TIP: Un contrôle est fait par le plugin pour que le résultat du calcul soit compris entre 0 et 100. Si le résultat du calcul est inférieur à 0, la valeur 0 est retenue et si le calcul donne un résultat supérieur à 100, la valeur 100 est retenue.
+
+
+==== Paramétrage des thermostats
+
+Il faut commencer par créer un thermostat.
+Il est possible de créer autant de thermostat que souhaité.
+
+image::../images/boilerThermostat_screenshot5.JPG[]
+
+TIP: Par défaut les commandes ne sont pas affichées, il faut cliquer sur le texte "Commandes" pour les voir apparaitre.
+
+Il faut configurer la sonde de température associée, ainsi que l'hystérésis et si on le souhaite, l'inertie.
+
+TIP: L'inertie permet d'anticiper la mise en route / l'arrêt de la chaudière. Par défaut la valeur de l'inertie est à 0 ce qui signifie qu'il n'y a pas d'inertie. Plus la pièce à d'inertie, plus il faut mettre une valeur élevée. Les valeurs limites sont de 0 à 90 (en dessous, la valeur 0 sera retenue et au-dessus, 90 sera retenue).
+
+Si on le souhaite, on peut également définir des actionneurs qui permettent de transmettre l'ordre de consigne ou l'ordre de mise en route ou d'arrêt (respectivement les types "Consigne","On","Off" du paramétrage) lorsque l'information correspondante change.
+Dans le cas où le type de l'actionneur est consigne, le paramétrage permet de definir un offset entre la consigne de l'actionneur et la consigne du thermostat (ceci afin de palier une différence de mesure de température entre l'actionneur et la sonde associée au thermostat).
+
+TIP: Ils peuvent être utilisés pour n'importe quelle action Jeedom, mais ont été conçu afin de transmettre la consigne à des têtes thermostatiques domotisées ou à des actionneurs de type On/Off.
+
+Pour ajouter un actionneur, il suffit de cliquer sur le bouton "Ajouter un actionneur"
+Enfin on peut également définir des modes sur le thermostat comme par exemple Confort ou Eco, il suffit pour cela de cliquer sur "Ajouter Mode" puis de définir un nom pour le mode ainsi qu'une température.
+
+La partie la plus intéressante du thermostat concerne le champ "Consigne ajustée" qui expose une formule permettant de calculer la consigne appliquée.
+
+Par défaut la formule est : #ID_CONSIGNE#-#ID_MANAGER_ADJUST#*0.03
+
+Cette formule signifie que la consigne appliquée correspond à la consigne définie sur le thermostat à laquelle on soustrait une valeur comprise entre 0° et 3° (cf pourcentage d'ajustement sur le manager).
+
+TIP: A priori vous n'avez pas à toucher à la formule de calcul, elle est toutefois éditable afin de vous permettre de régler la valeur maximale d'ajustement. Si par exemple vous souhaitez que la consigne ajoutée soit au maximum inférieur de 1,5°C par rapport à la consigne réelle, remplacer 0.03 dans la formule par 0.015.
