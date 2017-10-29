@@ -17,7 +17,6 @@ include::faq.asciidoc[]
 == Troubleshooting
 include::troubleshoting.asciidoc[]
 
-
 '''
 == Changelog
 include::changelog.asciidoc[]
