@@ -171,7 +171,7 @@ $eqLogicsManager = eqLogic::byTypeAndSearhConfiguration('boilerThermostat','Mana
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="col-sm-3 control-label">{{Coéfficent d'inertie (valeur entre 0 et 90)}}</label>
+                  <label class="col-sm-3 control-label">{{Coefficent d'inertie (valeur entre 0 et 90)}}</label>
                   <div class="col-sm-6">
                     <input type="number" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="inertiaFactor" step="1" min="0" max="90" value="0"/>
                   </div>
@@ -186,7 +186,7 @@ $eqLogicsManager = eqLogic::byTypeAndSearhConfiguration('boilerThermostat','Mana
           <fieldset>
             <legend>{{Modes}} <a class="btn btn-success btn-xs pull-right" id="bt_addMode" style="margin-top: 5px;"><i class="fa fa-plus-circle"></i> {{Ajouter mode}}</a></legend>
             <div id="div_modes"></div>
-            <legend>{{Actionneurs (Propagation des evenements On/Off et changement de consigne)}} <a class="btn btn-success btn-xs pull-right" id="bt_addActuator" style="margin-top: 5px;"><i class="fa fa-plus-circle"></i> {{Ajouter actionneur}}</a></legend>
+            <legend>{{Actionneurs (Propagation des évènements On/Off et changement de consigne)}} <a class="btn btn-success btn-xs pull-right" id="bt_addActuator" style="margin-top: 5px;"><i class="fa fa-plus-circle"></i> {{Ajouter actionneur}}</a></legend>
             <div id="div_actuators"></div>
           </fieldset>
         </form>
