@@ -65,6 +65,13 @@ $("body").delegate(".listCmdNumericInfo", 'click', function () {
     });
 });
 
+$("#div_actuators").on('change','.actuatorType', function () {
+    if ($(this).val() == 0)
+      $(this).closest('.childActuator').find('.setPointActuatorOptions').show();
+    else
+      $(this).closest('.childActuator').find('.setPointActuatorOptions').hide();
+});
+
  $("#div_actuators").delegate('.bt_removeAction', 'click', function () {
     $(this).closest('.childActuator').remove();
 });
@@ -211,26 +218,29 @@ function addActuator(_action, _name, _el) {
 
     var div = '<div class="childActuator form-group">';
     div += '<label class="col-sm-1 control-label">' + _name + '</label>';
-    div += '<div class="col-sm-4">';
+    div += '<div class="col-sm-3">';
     div += '<a class="btn btn-default bt_removeAction btn-sm"><i class="fa fa-minus-circle"></i></a>';
     div += '<input style="width:250px;" class="expressionAttr input-sm cmdAction" data-l1key="cmd"/>';
     div += '<a class="btn ' + button + ' btn-sm listCmdChildActuatorAction"><i class="fa fa-list-alt"></i></a>';
     div += '</div>';
     div += '<label class="col-sm-1 control-label">' + 'Type' + '</label>';
     div += '<div class="col-sm-1">';
-    div += '<select class="expressionAttr input-sm" data-l1key="type">';
+    div += '<select class="actuatorType expressionAttr input-sm" data-l1key="type">';
     div += '<option value="0">{{Consigne}}</option>'
     div += '<option value="1">{{On}}</option>'
     div += '<option value="2">{{Off}}</option>'
     div += '</select>';
     div += '</div>';
-    if (init(_action.type) == 0)
-    {
-      div += '<label class="col-sm-1 control-label">Offset</label>';
-      div += '<div class="col-sm-1">';
-      div += '<input type="number" class="expressionAttr input-sm" data-l1key="offset" step="0.1" min="-5" max="5" value="0"/>';
-      div += '</div>';
-    }
+    div += '<div class="setPointActuatorOptions" hidden>'
+    div += '<label class="col-sm-1 control-label">Offset</label>';
+    div += '<div class="col-sm-1">';
+    div += '<input type="number" class="expressionAttr input-sm" data-l1key="offset" step="0.1" min="-5" max="5" value="0"/>';
+    div += '</div>';
+    div += '<div class="col-sm-2">';
+    div += '<label class="checkbox-inline">';
+    div += '<input type="checkbox" class="expressionAttr" data-l1key="isSetPointController" />controle la consigne</label>'; 
+    div += '</div>';
+    div += '</div>'
     div += '</div>';
     if (isset(_el)) {
         _el.append(div);

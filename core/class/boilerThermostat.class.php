@@ -31,6 +31,59 @@ class boilerThermostat extends eqLogic {
     $eqManager->setConfiguration('type',$type);
     $eqManager->save();
   }
+  
+  public static function runActuatorLogic($param)
+  {
+    try {
+      log::add('boilerThermostat', 'debug', 'on runActuatorLogic');
+      log::add('boilerThermostat', 'debug', json_encode($param));
+      //Calcul de la température de consigne lié
+      //Récupération de l'actionneur correspondant
+      $eqp = eqLogic::byId($param['eqpID']);
+      $actuators = $eqp->getConfiguration('childActuators');
+      $foundActuator = false;
+      $newSetPoint = 0;
+      foreach ($actuators as $actuator)
+      {
+        if ($actuator['type'] != 0) continue;
+        $actuatorCmd = cmd::byId(str_replace('#', '', $actuator['cmd']));
+        $actuatorCmdInfo = $actuatorCmd->getValue();
+        log::add('boilerThermostat', 'debug', 'value lié de  : ' . str_replace('#', '', $actuatorCmdInfo) . ' vs ' . $param['event_id']);
+        if (str_replace('#', '', $actuatorCmdInfo) != $param['event_id']) continue;
+        $newSetPoint = $param['value']-$actuator['offset'];
+        $newSetPoint = $newSetPoint - $eqp->getConfiguration('hysteresis');
+        $newSetPoint = round($newSetPoint*2-0.49,0)/2;
+        //Calcul du delta consigne vs consigne ajustée
+        $cmdSetPoint = $eqp->getCmd('info','setPoint');
+        $cmdAdjustedSetPoint = $eqp->getCmd('info','adjustedSetPoint');
+        $adjustedSetpointValue = $cmdAdjustedSetPoint->execCmd();
+        //On controle que la consigne est bien supérieur à la valeur min
+        if ($newSetPoint < $cmdAdjustedSetPoint->getConfiguration('minValue', $newSetPoint)) 
+        {
+          log::add('boilerThermostat', 'info', 'Le retour de consigne est inférieur à la valeur min de consigne : ' . $newSetPoint);
+          return;
+        }
+        if ($newSetPoint == $adjustedSetpointValue)
+        {
+          log::add('boilerThermostat', 'debug', 'New value already equal to adjusted value : ' . $newSetPoint);
+          $foundActuator = true;
+          break;
+        }
+        $delta = $cmdSetPoint->execCmd()-$adjustedSetpointValue;
+        $newSetPoint = $newSetPoint + $delta;
+        $cmdSetPointActuator = $eqp->getCmd('action','setPointActuator');
+        log::add('boilerThermostat', 'info', 'Définition de la consigne : ' . $newSetPoint . ' par la vanne ' . $param['event_id']);
+        scenarioExpression::createAndExec('action', $cmdSetPointActuator->getId(), array ( 'slider' => $newSetPoint, 'mode' => 'Manuel Vanne'));
+        $foundActuator = true;
+        break;
+      }
+      
+      if (!$foundActuator) throw new Exception('Action introuvable');
+    } catch (Exception $e) {
+      log::add('boilerThermostat','error', displayExeption($e).', errCode : '.$e->getCode());
+      throw $e;
+    }
+  }
 
   public static function runBoilerLogic($param)
   {
@@ -533,7 +586,7 @@ class boilerThermostat extends eqLogic {
         $tmpOpt = $opts;
         $tmpOpt['slider'] += $action['offset'];
         //Convertir array en string (json php)?
-        log::add('boilerThermostat','debug','Execution de la commande : '.$action['cmd']." avec les options ".json_encode($tmpOpt));
+        log::add('boilerThermostat','info','Execution de la commande : '.$action['cmd']." avec les options ".json_encode($tmpOpt));
         scenarioExpression::createAndExec('action', $action['cmd'],$tmpOpt);
       }
     }
@@ -571,8 +624,8 @@ public function setAppMobileParameters($forceParam = false)
     'mode'=>'THERMOSTAT_MODE',
     'modeAction'=>'THERMOSTAT_SET_MODE',
     'associatedTemperatureSensor'=>'THERMOSTAT_TEMPERATURE',
-    'setPoint'=>'DONT',
-    'adjustedSetPoint'=>'THERMOSTAT_SETPOINT',
+    'setPoint'=>'THERMOSTAT_SETPOINT',
+    'adjustedSetPoint'=>'DONT',
     'setPointActuator'=>'THERMOSTAT_SET_SETPOINT',
     'status'=>'THERMOSTAT_STATE',
     'statusName'=>'THERMOSTAT_STATE_NAME',
@@ -615,6 +668,57 @@ public function postSave() {
     log::add('boilerThermostat','error', displayExeption($e).', errCode : '.$e->getCode());
     throw $e;
   }
+  
+  //Manage listener for setPoint return
+  try {
+    $opt = array();
+    $opt['eqpID'] = $this->getId();
+    $listener = listener::byClassAndFunction('boilerThermostat', 'runActuatorLogic',$opt);
+    //On réinitialise les evenement
+    if(is_object($listener)) 
+    {
+      $listener->setEvent(array());
+      $listener->save();
+    }
+    
+    $actuators = $this->getConfiguration('childActuators');
+    //On gére les actionneurs associé aux thermostats
+    foreach ($actuators as $actuator)
+    {
+      if (!isset($actuator['type'])) $actuator['type'] = 0;
+      //On gere les actionneurs sur consigne
+      if ($actuator['type'] != 0 || $actuator['isSetPointController'] == 0) continue;
+      //Récuperation de l'info de consigne lié a l'actionneur
+      $actuatorCmd = cmd::byId(str_replace('#', '', $actuator['cmd']));
+      $actuatorCmdInfo = $actuatorCmd->getValue();
+      if (!$actuatorCmdInfo || $actuatorCmdInfo == '')
+      {
+        log::add('boilerThermostat','error',"Impossible d'activer le retour de l'actionneur " . $actuator['cmd'] .", le commande d'info associé à l'action n'est pas defini");
+        continue;
+      }
+      if(!is_object($listener))
+      {
+        $listener = new listener();
+        $listener->setClass('boilerThermostat');
+        $listener->setFunction('runActuatorLogic');        
+        $listener->addEvent($actuatorCmdInfo);
+        $listener->setOption($opt);
+        $listener->save();
+      }
+      else
+      {
+        $listener->addEvent($actuatorCmdInfo);
+        $listener->save();
+      }
+    }
+
+    //Si le listener n'est plus nécessaire, on le supprime
+    if (is_object($listener) && count($listener->getEvent()) == 0) $listener->remove();
+    
+  } catch (Exception $e) {
+    log::add('boilerThermostat','error', displayExeption($e).', errCode : '.$e->getCode());
+    throw $e;
+  }
 }
 
 /*public function preAjax() {
@@ -626,9 +730,12 @@ public function postAjax() {
   else $this->manageCmdOrder();
 }
 
-/*public function preRemove() {
-
-}*/
+public function preRemove() {
+  $opt = array();
+  $opt['eqpID'] = $this->getId();
+  $listener = listener::byClassAndFunction('boilerThermostat', 'runActuatorLogic',$opt);
+  if(is_object($listener)) $listener->remove();
+}
 
 /*public function postRemove() {
 //log::add('boilerThermostat', 'debug', 'PostRemove');
@@ -824,10 +931,10 @@ class boilerThermostatCmd extends cmd {
 
         if (!$actualState)
         {
-          log::add('boilerThermostat','info','Thermostat : ' . $this->getEqLogic()->getHumanName() . ', Calcul status ==> Température pour chauffer : '.$startHeatingTemp);
+          log::add('boilerThermostat','info','Thermostat : ' . $this->getEqLogic()->getHumanName() . ', Status "Arrêté" ==> Température pour chauffer : '.$startHeatingTemp);
         }
         else {
-          log::add('boilerThermostat','info','Thermostat : ' . $this->getEqLogic()->getHumanName() . ', Calcul status ==> Température pour arreter : '.$stopHeatingTemp);
+          log::add('boilerThermostat','info','Thermostat : ' . $this->getEqLogic()->getHumanName() . ', Status "Chauffage" ==> Température pour arreter : '.$stopHeatingTemp);
         }
 
         //Check if heating is necessary
