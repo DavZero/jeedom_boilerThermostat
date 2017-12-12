@@ -849,6 +849,7 @@ class boilerThermostatCmd extends cmd {
         $opt['mode'] = $this->getName();
         if ($opt['slider'] == 'Off')
           $opt['slider'] = $this->getEqLogic()->getCmd(null, 'setPoint')->execCmd();
+        log::add('boilerThermostat','debug','Activation du mode : ' .json_encode($opt));
         $actuator = $this->getEqLogic()->getCmd(null, 'setPointActuator');
         scenarioExpression::createAndExec('action', $actuator->getId(), $opt);
         break;
