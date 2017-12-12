@@ -69,6 +69,7 @@ class boilerThermostat extends eqLogic {
           $foundActuator = true;
           break;
         }
+        log::add('boilerThermostat', 'debug', 'Consigne ajustée actuel : ' . $adjustedSetpointValue . ', nouvelle consigne ajustée : ' . $newSetPoint);
         $delta = $cmdSetPoint->execCmd()-$adjustedSetpointValue;
         $newSetPoint = $newSetPoint + $delta;
         $cmdSetPointActuator = $eqp->getCmd('action','setPointActuator');
