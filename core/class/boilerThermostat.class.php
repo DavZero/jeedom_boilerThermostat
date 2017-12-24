@@ -37,6 +37,21 @@ class boilerThermostat extends eqLogic {
     try {
       log::add('boilerThermostat', 'debug', 'on runActuatorLogic');
       log::add('boilerThermostat', 'debug', json_encode($param));
+      //On vérifie si l'evenement est valide
+      $actuatorCmdInfo = cmd::byId($param['event_id']);
+      if (!is_object($actuatorCmdInfo)) 
+        throw new Exception("runActuatorLogic : Impossible de trouver l'emetteur de l'évènement");
+      $collectDate = $actuatorCmdInfo->getCache('collectDate');
+      $valueDate = $actuatorCmdInfo->getCache('valueDate');
+      if ($collectDate != $valueDate)
+      {
+        log::add('boilerThermostat', 'debug', 'Evenement non valide, collectDate : ' . $collectDate  . ', valueDate : ' . $valueDate );
+        return;
+      }
+      else
+      {
+        log::add('boilerThermostat', 'debug', 'Evenement valide, collectDate : ' . $collectDate . ', valueDate : ' . $valueDate );
+      }
       //Calcul de la température de consigne lié
       //Récupération de l'actionneur correspondant
       $eqp = eqLogic::byId($param['eqpID']);
@@ -47,9 +62,9 @@ class boilerThermostat extends eqLogic {
       {
         if ($actuator['type'] != 0) continue;
         $actuatorCmd = cmd::byId(str_replace('#', '', $actuator['cmd']));
-        $actuatorCmdInfo = $actuatorCmd->getValue();
-        log::add('boilerThermostat', 'debug', 'value lié de  : ' . str_replace('#', '', $actuatorCmdInfo) . ' vs ' . $param['event_id']);
-        if (str_replace('#', '', $actuatorCmdInfo) != $param['event_id']) continue;
+        $actuatorCmdValue = $actuatorCmd->getValue();
+        log::add('boilerThermostat', 'debug', 'value lié de  : ' . str_replace('#', '', $actuatorCmdValue) . ' vs ' . $param['event_id']);
+        if (str_replace('#', '', $actuatorCmdValue) != $param['event_id']) continue;
         $newSetPoint = $param['value']-$actuator['offset'];
         $newSetPoint = $newSetPoint - $eqp->getConfiguration('hysteresis');
         $newSetPoint = round($newSetPoint*2-0.49,0)/2;
