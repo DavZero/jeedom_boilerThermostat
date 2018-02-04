@@ -37,21 +37,37 @@ class boilerThermostat extends eqLogic {
     try {
       log::add('boilerThermostat', 'debug', 'on runActuatorLogic');
       log::add('boilerThermostat', 'debug', json_encode($param));
+      //Récupération de l'equipement correspondant
+      $eqp = eqLogic::byId($param['eqpID']);
+      $actuatorsStatus = $eqp->getConfiguration('actuatorsStatus');
+      log::add('boilerThermostat', 'debug', 'Ancien status : ' . $actuatorsStatus[$param['event_id']]);
       //On vérifie si l'evenement est valide
       $actuatorCmdInfo = cmd::byId($param['event_id']);
       if (!is_object($actuatorCmdInfo)) 
         throw new Exception("runActuatorLogic : Impossible de trouver l'emetteur de l'évènement");
       $collectDate = $actuatorCmdInfo->getCache('collectDate');
       $valueDate = $actuatorCmdInfo->getCache('valueDate');
-      if ($collectDate != $valueDate)
+      if ($collectDate != $valueDate && $actuatorsStatus[$param['event_id']] == 1)
       {
-        log::add('boilerThermostat', 'debug', 'Evenement non valide, collectDate : ' . $collectDate  . ', valueDate : ' . $valueDate );
+        log::add('boilerThermostat', 'debug', 'Evenement valide, collectDate : ' . $collectDate  . ', valueDate : ' . $valueDate);
+        $actuatorsStatus[$param['event_id']] = 0;
+        $actuatorsStatus = $eqp->setConfiguration('actuatorsStatus',$actuatorsStatus);
+        $eqp->save();
+      }
+      else if ($collectDate == $valueDate && $actuatorsStatus[$param['event_id']] != 1)
+      {
+        log::add('boilerThermostat', 'debug', 'Evenement non valide, collectDate : ' . $collectDate  . ', valueDate : ' . $valueDate);
+        $actuatorsStatus[$param['event_id']] = 1;
+        $actuatorsStatus = $eqp->setConfiguration('actuatorsStatus',$actuatorsStatus);
+        $eqp->save();
         return;
       }
       else
       {
-        log::add('boilerThermostat', 'debug', 'Evenement valide, collectDate : ' . $collectDate . ', valueDate : ' . $valueDate );
+        log::add('boilerThermostat', 'debug', 'Evenement non valide sans incidence sur le statut, collectDate : ' . $collectDate  . ', valueDate : ' . $valueDate);
+        return;
       }
+      
       //Calcul de la température de consigne lié
       //Récupération de l'actionneur correspondant
       $eqp = eqLogic::byId($param['eqpID']);
@@ -488,10 +504,10 @@ class boilerThermostat extends eqLogic {
 
     //Ajout / suppression des modes
     foreach ($this->getCmd('action', 'modeAction', null, true) as $cmd) {
-      log::add('boilerThermostat','debug','traitement de la commande : '.$cmd->getName());
       if (isset($modeList[$cmd->getName()])) {
         if ($cmd->getConfiguration('option') != $modeList[$cmd->getName()]['option'])
         {
+          log::add('boilerThermostat','debug','Mise a jour de la commande : '.$cmd->getName());
           $cmd->setConfiguration('option',$modeList[$cmd->getName()]['option']);
           $cmd->save();
         }
@@ -499,6 +515,7 @@ class boilerThermostat extends eqLogic {
       }
       else
       {
+        log::add('boilerThermostat','debug','Suppression de la commande : '.$cmd->getName());
         $cmd->remove();
       }
     }
