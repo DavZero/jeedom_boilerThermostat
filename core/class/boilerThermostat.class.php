@@ -31,49 +31,19 @@ class boilerThermostat extends eqLogic {
     $eqManager->setConfiguration('type',$type);
     $eqManager->save();
   }
-  
+
   public static function runActuatorLogic($param)
   {
     try {
       log::add('boilerThermostat', 'debug', 'on runActuatorLogic');
       log::add('boilerThermostat', 'debug', json_encode($param));
+
       //Récupération de l'equipement correspondant
       $eqp = eqLogic::byId($param['eqpID']);
-      $actuatorsStatus = $eqp->getConfiguration('actuatorsStatus');
-      log::add('boilerThermostat', 'debug', 'Ancien status : ' . $actuatorsStatus[$param['event_id']]);
-      //On vérifie si l'evenement est valide
-      $actuatorCmdInfo = cmd::byId($param['event_id']);
-      if (!is_object($actuatorCmdInfo)) 
-        throw new Exception("runActuatorLogic : Impossible de trouver l'emetteur de l'évènement");
-      $collectDate = $actuatorCmdInfo->getCache('collectDate');
-      $valueDate = $actuatorCmdInfo->getCache('valueDate');
-      if ($collectDate != $valueDate && $actuatorsStatus[$param['event_id']] == 1)
-      {
-        log::add('boilerThermostat', 'debug', 'Evenement valide, collectDate : ' . $collectDate  . ', valueDate : ' . $valueDate);
-        $actuatorsStatus[$param['event_id']] = 0;
-        $actuatorsStatus = $eqp->setConfiguration('actuatorsStatus',$actuatorsStatus);
-        $eqp->save();
-      }
-      else if ($collectDate == $valueDate && $actuatorsStatus[$param['event_id']] != 1)
-      {
-        log::add('boilerThermostat', 'debug', 'Evenement non valide, collectDate : ' . $collectDate  . ', valueDate : ' . $valueDate);
-        $actuatorsStatus[$param['event_id']] = 1;
-        $actuatorsStatus = $eqp->setConfiguration('actuatorsStatus',$actuatorsStatus);
-        $eqp->save();
-        return;
-      }
-      else
-      {
-        log::add('boilerThermostat', 'debug', 'Evenement non valide sans incidence sur le statut, collectDate : ' . $collectDate  . ', valueDate : ' . $valueDate);
-        return;
-      }
-      
-      //Calcul de la température de consigne lié
+
       //Récupération de l'actionneur correspondant
-      $eqp = eqLogic::byId($param['eqpID']);
       $actuators = $eqp->getConfiguration('childActuators');
-      $foundActuator = false;
-      $newSetPoint = 0;
+      $validActuator = null;
       foreach ($actuators as $actuator)
       {
         if ($actuator['type'] != 0) continue;
@@ -81,36 +51,80 @@ class boilerThermostat extends eqLogic {
         $actuatorCmdValue = $actuatorCmd->getValue();
         log::add('boilerThermostat', 'debug', 'value lié de  : ' . str_replace('#', '', $actuatorCmdValue) . ' vs ' . $param['event_id']);
         if (str_replace('#', '', $actuatorCmdValue) != $param['event_id']) continue;
-        $newSetPoint = $param['value']-$actuator['offset'];
-        $newSetPoint = $newSetPoint - $eqp->getConfiguration('hysteresis');
-        $newSetPoint = round($newSetPoint*2-0.49,0)/2;
-        //Calcul du delta consigne vs consigne ajustée
-        $cmdSetPoint = $eqp->getCmd('info','setPoint');
-        $cmdAdjustedSetPoint = $eqp->getCmd('info','adjustedSetPoint');
-        $adjustedSetpointValue = $cmdAdjustedSetPoint->execCmd();
-        //On controle que la consigne est bien supérieur à la valeur min
-        if ($newSetPoint < $cmdAdjustedSetPoint->getConfiguration('minValue', $newSetPoint)) 
-        {
-          log::add('boilerThermostat', 'info', 'Le retour de consigne est inférieur à la valeur min de consigne : ' . $newSetPoint);
-          return;
-        }
-        if ($newSetPoint == $adjustedSetpointValue)
-        {
-          log::add('boilerThermostat', 'debug', 'New value already equal to adjusted value : ' . $newSetPoint);
-          $foundActuator = true;
-          break;
-        }
-        log::add('boilerThermostat', 'debug', 'Consigne ajustée actuel : ' . $adjustedSetpointValue . ', nouvelle consigne ajustée : ' . $newSetPoint);
-        $delta = $cmdSetPoint->execCmd()-$adjustedSetpointValue;
-        $newSetPoint = $newSetPoint + $delta;
-        $cmdSetPointActuator = $eqp->getCmd('action','setPointActuator');
-        log::add('boilerThermostat', 'info', 'Définition de la consigne : ' . $newSetPoint . ' par la vanne ' . $param['event_id']);
-        scenarioExpression::createAndExec('action', $cmdSetPointActuator->getId(), array ( 'slider' => $newSetPoint, 'mode' => 'Manuel Vanne'));
-        $foundActuator = true;
+        $validActuator = $actuator;
         break;
       }
-      
-      if (!$foundActuator) throw new Exception('Action introuvable');
+
+      if ($validActuator == null) throw new Exception('Action introuvable');
+
+      //On vérifie si l'evenement est valide
+      $actuatorCmdInfo = cmd::byId($param['event_id']);
+      if (!is_object($actuatorCmdInfo))
+        throw new Exception("runActuatorLogic : Impossible de trouver l'emetteur de l'évènement");
+      $collectDate = $actuatorCmdInfo->getCache('collectDate');
+      $valueDate = $actuatorCmdInfo->getCache('valueDate');
+      if($validActuator['ignoreFirstEvent'] == 1)
+      {
+        $actuatorsStatus = $eqp->getConfiguration('actuatorsStatus');
+        log::add('boilerThermostat', 'debug', 'Ancien status : ' . $actuatorsStatus[$param['event_id']]);
+        if ($collectDate != $valueDate && $actuatorsStatus[$param['event_id']] == 1)
+        {
+          log::add('boilerThermostat', 'debug', 'Evenement valide, collectDate : ' . $collectDate  . ', valueDate : ' . $valueDate);
+          $actuatorsStatus[$param['event_id']] = 0;
+          $actuatorsStatus = $eqp->setConfiguration('actuatorsStatus',$actuatorsStatus);
+          $eqp->save();
+        }
+        else if ($collectDate == $valueDate && $actuatorsStatus[$param['event_id']] != 1)
+        {
+          log::add('boilerThermostat', 'debug', 'Evenement non valide, collectDate : ' . $collectDate  . ', valueDate : ' . $valueDate);
+          $actuatorsStatus[$param['event_id']] = 1;
+          $actuatorsStatus = $eqp->setConfiguration('actuatorsStatus',$actuatorsStatus);
+          $eqp->save();
+          return;
+        }
+        else
+        {
+          log::add('boilerThermostat', 'debug', 'Evenement non valide sans incidence sur le statut, collectDate : ' . $collectDate  . ', valueDate : ' . $valueDate);
+          return;
+        }
+      }
+      else {
+        if($collectDate == $valueDate)
+          log::add('boilerThermostat', 'debug', 'Evenement valide, collectDate : ' . $collectDate  . ', valueDate : ' . $valueDate);
+        else {
+          log::add('boilerThermostat', 'debug', 'Evenement non valide, collectDate : ' . $collectDate  . ', valueDate : ' . $valueDate);
+          return;
+        }
+      }
+
+      //Calcul de la consigne lié
+      $newSetPoint = $param['value'] - $validActuator['offset'];
+      $newSetPoint = $newSetPoint - $eqp->getConfiguration('hysteresis');
+      $newSetPoint = round($newSetPoint*2-0.49,0)/2;
+      //Calcul du delta consigne vs consigne ajustée
+      $cmdSetPoint = $eqp->getCmd('info','setPoint');
+      $cmdAdjustedSetPoint = $eqp->getCmd('info','adjustedSetPoint');
+      $adjustedSetpointValue = $cmdAdjustedSetPoint->execCmd();
+
+      //On controle que la consigne est bien supérieur à la valeur min
+      if ($newSetPoint < $cmdAdjustedSetPoint->getConfiguration('minValue', $newSetPoint))
+      {
+        log::add('boilerThermostat', 'info', 'Le retour de consigne est inférieur à la valeur min de consigne : ' . $newSetPoint);
+        return;
+      }
+      if ($newSetPoint == $adjustedSetpointValue)
+      {
+        log::add('boilerThermostat', 'debug', 'New value already equal to adjusted value : ' . $newSetPoint);
+        return;
+      }
+
+      log::add('boilerThermostat', 'debug', 'Consigne ajustée actuel : ' . $adjustedSetpointValue . ', nouvelle consigne ajustée : ' . $newSetPoint);
+      $delta = $cmdSetPoint->execCmd()-$adjustedSetpointValue;
+      $newSetPoint = $newSetPoint + $delta;
+      $cmdSetPointActuator = $eqp->getCmd('action','setPointActuator');
+      log::add('boilerThermostat', 'info', 'Définition de la consigne : ' . $newSetPoint . ' par la vanne ' . $param['event_id']);
+      scenarioExpression::createAndExec('action', $cmdSetPointActuator->getId(), array ( 'slider' => $newSetPoint, 'mode' => 'Manuel Vanne'));
+
     } catch (Exception $e) {
       log::add('boilerThermostat','error', displayExeption($e).', errCode : '.$e->getCode());
       throw $e;
@@ -701,19 +715,19 @@ public function postSave() {
     log::add('boilerThermostat','error', displayExeption($e).', errCode : '.$e->getCode());
     throw $e;
   }
-  
+
   //Manage listener for setPoint return
   try {
     $opt = array();
     $opt['eqpID'] = $this->getId();
     $listener = listener::byClassAndFunction('boilerThermostat', 'runActuatorLogic',$opt);
     //On réinitialise les evenement
-    if(is_object($listener)) 
+    if(is_object($listener))
     {
       $listener->setEvent(array());
       $listener->save();
     }
-    
+
     $actuators = $this->getConfiguration('childActuators');
     //On gére les actionneurs associé aux thermostats
     foreach ($actuators as $actuator)
@@ -733,7 +747,7 @@ public function postSave() {
       {
         $listener = new listener();
         $listener->setClass('boilerThermostat');
-        $listener->setFunction('runActuatorLogic');        
+        $listener->setFunction('runActuatorLogic');
         $listener->addEvent($actuatorCmdInfo);
         $listener->setOption($opt);
         $listener->save();
@@ -747,7 +761,7 @@ public function postSave() {
 
     //Si le listener n'est plus nécessaire, on le supprime
     if (is_object($listener) && count($listener->getEvent()) == 0) $listener->remove();
-    
+
   } catch (Exception $e) {
     log::add('boilerThermostat','error', displayExeption($e).', errCode : '.$e->getCode());
     throw $e;

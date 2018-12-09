@@ -21,7 +21,8 @@ $eqLogicsManager = eqLogic::byTypeAndSearhConfiguration('boilerThermostat','Mana
         }
         else {
           foreach ($eqLogicsManager as $eqLogic) {
-            echo '<li class="cursor li_eqLogic" data-eqLogic_id="' . $eqLogic->getId() . '"><a>' . $eqLogic->getHumanName(true) . '</a></li>';
+            $opacity = ($eqLogic->getIsEnable()) ? '' : jeedom::getConfiguration('eqLogic:style:noactive');
+            echo '<li class="cursor li_eqLogic" data-eqLogic_id="' . $eqLogic->getId() . '" style="' . $opacity . '"><a>' . $eqLogic->getHumanName(true) . '</a></li>';
           }
         }
         ?>
@@ -44,7 +45,7 @@ $eqLogicsManager = eqLogic::byTypeAndSearhConfiguration('boilerThermostat','Mana
       if (!count($eqLogicsManager))
       {
         ?>
-        <div class="cursor eqLogicCustomAction" data-action="addManager" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >
+        <div class="cursor eqLogicCustomAction" data-action="addManager" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;' . $opacity . '" >';
           <center>
             <i class="fa fa-plus-circle" style="font-size : 7em;color:#94ca02;"></i>
           </center>
@@ -54,6 +55,7 @@ $eqLogicsManager = eqLogic::byTypeAndSearhConfiguration('boilerThermostat','Mana
       }
       else {
         foreach ($eqLogicsManager as $eqLogic) {
+          $opacity = ($eqLogic->getIsEnable()) ? '' : jeedom::getConfiguration('eqLogic:style:noactive');
           echo '<div class="eqLogicDisplayCard cursor" data-eqLogic_id="' . $eqLogic->getId() . '" style="background-color : #ffffff; height : 200px;margin-bottom : 10px;padding : 5px;border-radius: 2px;width : 160px;margin-left : 10px;" >';
           echo "<center>";
           echo '<img src="' . $plugin->getPathImgIcon() . '" height="105" width="95" />';
@@ -142,10 +144,14 @@ $eqLogicsManager = eqLogic::byTypeAndSearhConfiguration('boilerThermostat','Mana
                     <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isEnable" checked/>{{Activer}}</label>
                     <label class="checkbox-inline"><input type="checkbox" class="eqLogicAttr" data-l1key="isVisible" checked/>{{Visible}}</label>
                   </div>
-                </div>
-              </fieldset>
-            </form>
-          </div>
+                  <!--<div class="col-sm-9">
+                  <input type="checkbox" class="eqLogicAttr bootstrapSwitch" data-label-text="{{Activer}}" data-l1key="isEnable" checked/>
+                  <input type="checkbox" class="eqLogicAttr bootstrapSwitch" data-label-text="{{Visible}}" data-l1key="isVisible" checked/>
+                </div>-->
+              </div>
+            </fieldset>
+          </form>
+        </div>
         <div class="col-sm-6">
           <form class="form-horizontal">
             <fieldset>
@@ -171,7 +177,7 @@ $eqLogicsManager = eqLogic::byTypeAndSearhConfiguration('boilerThermostat','Mana
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="col-sm-3 control-label">{{Coefficent d'inertie (valeur entre 0 et 90)}}</label>
+                  <label class="col-sm-3 control-label">{{Coéfficent d'inertie (valeur entre 0 et 90)}}</label>
                   <div class="col-sm-6">
                     <input type="number" class="eqLogicAttr form-control" data-l1key="configuration" data-l2key="inertiaFactor" step="1" min="0" max="90" value="0"/>
                   </div>
@@ -186,7 +192,7 @@ $eqLogicsManager = eqLogic::byTypeAndSearhConfiguration('boilerThermostat','Mana
           <fieldset>
             <legend>{{Modes}} <a class="btn btn-success btn-xs pull-right" id="bt_addMode" style="margin-top: 5px;"><i class="fa fa-plus-circle"></i> {{Ajouter mode}}</a></legend>
             <div id="div_modes"></div>
-            <legend>{{Actionneurs (Propagation des évènements On/Off et changement de consigne)}} <a class="btn btn-success btn-xs pull-right" id="bt_addActuator" style="margin-top: 5px;"><i class="fa fa-plus-circle"></i> {{Ajouter actionneur}}</a></legend>
+            <legend>{{Actionneurs (Propagation des evenements On/Off et changement de consigne)}} <a class="btn btn-success btn-xs pull-right" id="bt_addActuator" style="margin-top: 5px;"><i class="fa fa-plus-circle"></i> {{Ajouter actionneur}}</a></legend>
             <div id="div_actuators"></div>
           </fieldset>
         </form>

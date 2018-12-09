@@ -238,8 +238,15 @@ function addActuator(_action, _name, _el) {
     div += '</div>';
     div += '<div class="col-sm-2">';
     div += '<label class="checkbox-inline">';
-    div += '<input type="checkbox" class="expressionAttr" data-l1key="isSetPointController" />controle la consigne</label>'; 
+    div += '<input type="checkbox" class="expressionAttr" data-l1key="isSetPointController" />controle la consigne</label>';
     div += '</div>';
+    if (init(_action.isSetPointController) == 1)
+    {
+      div += '<div class="col-sm-2">';
+      div += '<label class="checkbox-inline">';
+      div += '<input type="checkbox" class="expressionAttr" data-l1key="ignoreFirstEvent" />ignorer premier evenement</label>';
+      div += '</div>';
+    }
     div += '</div>'
     div += '</div>';
     if (isset(_el)) {
