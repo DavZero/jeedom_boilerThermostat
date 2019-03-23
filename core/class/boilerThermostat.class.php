@@ -553,11 +553,14 @@ class boilerThermostat extends eqLogic {
   public function manageCmdOrder()
   {
     //Récupération du "order de l'info mode"
-    $infoModeOrder = $this->getCmd('info', 'mode')->getOrder();
+    //log::add('boilerThermostat','debug','In ManageCmdOrder');
+    $infoModeOrder = cmd::byID($this->getCmd('info', 'mode')->getId())->getOrder();
+    //log::add('boilerThermostat','debug','Order of Mode Info = '.$infoModeOrder );
     $modeList = $this->getOrderedModeList();
 
     //Gestion de l'ordre des commandes
     foreach (cmd::byEqLogicID($this->getId()) as $cmd) {
+      //log::add('boilerThermostat','debug','cmd '.$cmd->getName().' ordrer = ' . $cmd->getOrder());
       if ($cmd->getLogicalId() == 'modeAction')
       {
         $cmd->setOrder($infoModeOrder+$modeList[$cmd->getName()]['ID']+1);
@@ -568,6 +571,7 @@ class boilerThermostat extends eqLogic {
         $cmd->setOrder($cmd->getOrder()+count($modeList));
         $cmd->save();
       }
+      //log::add('boilerThermostat','debug','cmd '.$cmd->getName().' ordrer = ' . $cmd->getOrder());
     }
   }
 
@@ -688,9 +692,11 @@ public function setAppMobileParameters($forceParam = false)
 
   foreach($this->getCmd() as $cmd)
   {
-    if ($cmd->getDisplay('generic_type')=='' || $forceParam)
-    $cmd->setDisplay('generic_type',$params[$cmd->getLogicalId()]);
-    $cmd->save();
+    if ($cmd->getGeneric_type()=='' || $forceParam)
+    {
+      $cmd->setGeneric_type($params[$cmd->getLogicalId()]);
+      $cmd->save();
+    }
   }
 }
 
