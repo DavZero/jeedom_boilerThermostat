@@ -80,7 +80,7 @@ $("#div_modes").delegate('.bt_removeAction', 'click', function () {
    $(this).closest('.mode').remove();
 });
 
-$('.eqLogicCustomAction[data-action=addManager]').off('click').on('click', function() {
+/*$('.eqLogicAction[data-action=addManager]').off('click').on('click', function() {
   bootbox.prompt("{{Nom de l'équipement ?}}", function(result) {
     if (result !== null) {
       jeedom.eqLogic.save({
@@ -104,9 +104,9 @@ $('.eqLogicCustomAction[data-action=addManager]').off('click').on('click', funct
       });
     }
   });
-});
+});*/
 
-$('.eqLogicCustomAction[data-action=addThermostat]').off('click').on('click', function() {
+$('.eqLogicAction[data-action=addThermostat]').off('click').on('click', function() {
   bootbox.prompt("{{Nom de l'équipement ?}}", function(result) {
     if (result !== null) {
       jeedom.eqLogic.save({
