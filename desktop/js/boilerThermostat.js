@@ -191,15 +191,15 @@ function addMode(_mode,_el){
   if (!isset(_mode)) {
       _mode = {};
   }
-  //var input = '';
-  //var button = 'btn-default';
 
   var div = '<div class="form-group mode">';
   div += '<label class="col-sm-1 control-label">' + _mode.name + '</label>';
-  div += '<div class="col-sm-2">';
   div += '<input class="expressionAttr" style="display: none;" data-l1key="name"/>';
-  div += '<a class="btn btn-default bt_removeAction btn-sm"><i class="fa fa-minus-circle"></i></a>';
-  div += '<input type="number" class="expressionAttr input-sm" data-l1key="option" step="0.5" min="10" max="25" value="19"/>';
+  div += '<div class="col-sm-2">';
+  div += '<div class="input-group input-group-sm">';
+  div += '<span class="input-group-btn"><a class="btn btn-default bt_removeAction roundedLeft" titre="Supprimer"><i class="fas fa-minus-circle" ></i></a></span>';
+  div += '<input type="number" class="expressionAttr form-control roundedRigth" data-l1key="option" step="0.5" min="10" max="25" value="19"/>';
+  div += '</div>';
   div += '</div>';
   div += '</div>';
   if (isset(_el)) {
@@ -215,40 +215,48 @@ function addActuator(_action, _name, _el) {
 
     var input = '';
     var button = 'btn-default';
-
     var div = '<div class="childActuator form-group">';
-    div += '<label class="col-sm-1 control-label">' + _name + '</label>';
+
+    div += '<label class="col-sm-1 control-label" style="min-width:100px">' + _name + '</label>';
     div += '<div class="col-sm-3">';
-    div += '<a class="btn btn-default bt_removeAction btn-sm"><i class="fa fa-minus-circle"></i></a>';
-    div += '<input style="width:250px;" class="expressionAttr input-sm cmdAction" data-l1key="cmd"/>';
-    div += '<a class="btn ' + button + ' btn-sm listCmdChildActuatorAction"><i class="fa fa-list-alt"></i></a>';
+    div += '<div class="input-group input-group-sm">';
+    div += '<span class="input-group-btn"><a class="btn btn-default bt_removeAction roundedLeft" titre="Supprimer"><i class="fas fa-minus-circle"></i></a></span>';
+    div += '<input type="text" class="expressionAttr form-control CmdAction" data-l1key="cmd" placeholder="Séléctionner une commande">';
+    div += '<span class="input-group-btn"><a class="btn btn-default listCmdChildActuatorAction roundedRight" titre="Selectionner"><i class="fas fa-list-alt"></i></a></span>';
     div += '</div>';
-    div += '<label class="col-sm-1 control-label">' + 'Type' + '</label>';
-    div += '<div class="col-sm-1">';
+    div += '</div>';
+
+    div += '<label class="col-sm-1 control-label" style="min-width:100px">' + 'Type' + '</label>';
+    div += '<div class="col-sm-1" style="min-width:100px">';
+    div += '<div class="input-group input-group-sm">';
     div += '<select class="actuatorType expressionAttr input-sm" data-l1key="type">';
     div += '<option value="0">{{Consigne}}</option>'
     div += '<option value="1">{{On}}</option>'
     div += '<option value="2">{{Off}}</option>'
     div += '</select>';
     div += '</div>';
-    div += '<div class="setPointActuatorOptions" hidden>'
-    div += '<label class="col-sm-1 control-label">Offset</label>';
-    div += '<div class="col-sm-1">';
-    div += '<input type="number" class="expressionAttr input-sm" data-l1key="offset" step="0.1" min="-5" max="5" value="0"/>';
     div += '</div>';
-    div += '<div class="col-sm-2">';
+
+    div += '<div class="setPointActuatorOptions" hidden>'
+    div += '<label class="col-sm-1 control-label" style="min-width:100px">' + 'Offset' + '</label>';
+    div += '<div class="col-sm-1 input-group-sm" style="min-width:80px">';
+    div += '<input type="number" class="expressionAttr form-control" data-l1key="offset" step="0.1" min="-5" max="5" value="0"/>';
+    div += '</div>';
+    div += '<div class="col-sm-1" style="min-width:230px">';
     div += '<label class="checkbox-inline">';
-    div += '<input type="checkbox" class="expressionAttr" data-l1key="isSetPointController" />controle la consigne</label>';
+    div += '<input type="checkbox" class="expressionAttr" data-l1key="isSetPointController"/>controle la consigne</label>';
     div += '</div>';
     if (init(_action.isSetPointController) == 1)
     {
-      div += '<div class="col-sm-2">';
+      div += '<div class="col-sm-2" style="min-width:250px">';
       div += '<label class="checkbox-inline">';
-      div += '<input type="checkbox" class="expressionAttr" data-l1key="ignoreFirstEvent" />ignorer premier evenement</label>';
+      div += '<input type="checkbox" class="expressionAttr" data-l1key="ignoreFirstEvent">ignorer premier evenement</label>';
       div += '</div>';
     }
-    div += '</div>'
     div += '</div>';
+
+    div += '</div>';
+
     if (isset(_el)) {
         _el.append(div);
         _el.find('.childActuator:last').setValues(_action, '.expressionAttr');
