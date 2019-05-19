@@ -983,6 +983,8 @@ class boilerThermostatCmd extends cmd
           $outputStatus = 0;
         }
 
+        log::add('boilerThermostat', 'info', 'Thermostat : ' . $this->getEqLogic()->getHumanName() . ', Nouveau Status : ' . $outputStatus);
+
         if ($needSave) $cmdSetPoint->save();
         return $outputStatus;
         break;
