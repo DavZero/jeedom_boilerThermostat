@@ -5,9 +5,10 @@ Il n'est possible de créer qu'un seul manager.
 
 image::../images/boilerThermostat_screenshot4.JPG[]
 
-TIP: Par défaut les commandes ne sont pas affichées, il faut cliquer sur le texte "Commandes" pour les voir apparaitre.
-
 Cet équipement permet de gérer un pourcentage qui affecte la température de consigne de tous les thermostats.
+
+TIP: La formule e calcule est difinissable directement dans les paramètre dans la commande "Pourcentage ajustement" dans l'onglet Commandes
+
 L'objectif est de permettre de diminuer la température de consigne lorsque l'utilisateur (ou les utilisateurs) est absent mais également de l'adapter en fonction de la distance des habitants par rapport au domicile. Ainsi si je m'éloigne de mon domicile, la température de consigne diminue et si je m'en rapproche, la température de consigne remonte pour atteindre celle souhaitée lorsque j'arrive à mon domicile.
 
 TIP: Ce pourcentage est ensuite utilisé sur chaque thermostat pour ajuster la consigne définie par l'utilisateur : ConsigneRéelle = ConsigneDéfini-3*Pourcentage/100, ce qui fait que si on définit une consigne de 19°C mais que l'on s'éloigne suffisamment de son domicile, la consigne peut être de 16°C en réalité.
@@ -38,8 +39,6 @@ Il est possible de créer autant de thermostat que souhaité.
 
 image::../images/boilerThermostat_screenshot5.JPG[]
 
-TIP: Par défaut les commandes ne sont pas affichées, il faut cliquer sur le texte "Commandes" pour les voir apparaitre.
-
 Il faut configurer la sonde de température associée, ainsi que l'hystérésis et si on le souhaite, l'inertie.
 
 TIP: L'inertie permet d'anticiper la mise en route / l'arrêt de la chaudière. Par défaut la valeur de l'inertie est à 0 ce qui signifie qu'il n'y a pas d'inertie. Plus la pièce à d'inertie, plus il faut mettre une valeur élevée. Les valeurs limites sont de 0 à 90 (en dessous, la valeur 0 sera retenue et au-dessus, 90 sera retenue).
@@ -49,7 +48,8 @@ Dans le cas où le type de l'actionneur est consigne, le paramétrage permet de 
 
 TIP: Ils peuvent être utilisés pour n'importe quelle action Jeedom, mais ont été conçu afin de transmettre la consigne à des têtes thermostatiques domotisées ou à des actionneurs de type On/Off.
 
-Pour ajouter un actionneur, il suffit de cliquer sur le bouton "Ajouter un actionneur"
+Pour ajouter un actionneur, il suffit de cliquer sur le bouton "Ajouter un actionneur". Il est possible de finir deux type d'actionneur, soit de type On/Off pour par exemple actionner une vanne tout ou rien en fonction de l'état du thermostat, soit de type Consigne pour passer à l'actionneur la valeur de la consigne. 
+Dans le cas d'actionneur de type consigne, il est possible de definir un offset afin de compenser une différence de mesure de température et il est également possible de definir si cette actionneur en plus de recevoir la consigne, pourra également la définir. Dans ce dernier cas, l'actionneur sera en mesure de mettre a jour la valeur de consigne du thermostat du plugin
 Enfin on peut également définir des modes sur le thermostat comme par exemple Confort ou Eco, il suffit pour cela de cliquer sur "Ajouter Mode" puis de définir un nom pour le mode ainsi qu'une température.
 
 La partie la plus intéressante du thermostat concerne le champ "Consigne ajustée" qui expose une formule permettant de calculer la consigne appliquée.

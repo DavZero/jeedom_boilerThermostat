@@ -66,6 +66,24 @@ function boilerThermostat_update()
         $eqLogic->setConfiguration('childActuators',$eqLogic->getConfiguration('setPointActuators'));
         $eqLogic->setConfiguration('setPointActuators',null);
       }
+
+      // ajout d'une option sur les Actionneur
+      $childActuators = $eqLogic->getConfiguration('childActuators');
+      $childActuatorsUpdated = false;
+      if (is_array($childActuators) && count($childActuators) > 0)
+      {
+        foreach ($childActuators as &$childActuator) {
+          if (!isset($childActuator['ignoreFirstEvent']))
+          {
+            $childActuator['ignoreFirstEvent'] = 1;
+            log::add('boilerThermostat_update','info','Traitement de l\'actionneur enfant ' . $childActuator['cmd'] . ' de l\'equipement ' . $eqLogic->getName());
+            $childActuatorsUpdated = true;
+          }
+        }
+        unset($childActuator);
+        if ($childActuatorsUpdated) $eqLogic->setConfiguration('childActuators',$childActuators);
+      }
+
       $tempSensor = $eqLogic->getConfiguration('temperatureSensor','');
       log::add('boilerThermostat_update','debug','temperatureSensor ' . $onHeatingConfiguration);
       if ($tempSensor != '' && strpos($tempSensor,'#') === false)
