@@ -1,9 +1,11 @@
 {
-	"id" : "boilerThermostat",
-	"name" : "Thermostat chaudière",
-	"description" : "Thermostat multizone pour chaudière",
-	"licence" : "AGPL",
-	"author" : "DavZero",
-	"require" : "2.4",
-	"category" : "wellness"
+	"id": "boilerThermostat",
+	"name": "Thermostat chaudière",
+	"description": "Thermostat multizone pour chaudière",
+	"licence": "AGPL",
+	"author": "DavZero",
+	"require": "3.2.12",
+	"category": "wellness",
+	"changelog": "https://davzero.github.io/jeedom-boilerThermostat/#language#/changelog",
+	"documentation": "https://davzero.github.io/jeedom-boilerThermostat/#language#/"
 }
