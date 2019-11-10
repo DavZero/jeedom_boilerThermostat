@@ -235,16 +235,16 @@ de 1,5°C par rapport à la consigne réelle, remplacer 0.03 dans la formule par
 
 FAQ
 ===
-.Le plugin nécessite-t-il des prérequis ?
+_Le plugin nécessite-t-il des prérequis ?_
 Non, mais pour une utilisation plus économique, le plugin a besoin de votre géolocalisation (ou a minima de connaitre l'état de présence/absence).
 
-.Comment gérer l'état de présence/absence autrement qu'avec la géolocalisation ?
+_Comment gérer l'état de présence/absence autrement qu'avec la géolocalisation ?_
 Il est possible d'utiliser le plugin agenda qui permettra de définir des plages de présence et d'absence, les actions de l'agenda piloteront les états des thermostats.
 
 
 Troubleshoting
 ==============
-.Le calcul du pourcentage d'ajustement ne fonctionne pas
+_Le calcul du pourcentage d'ajustement ne fonctionne pas_
 J'ai rencontré des problèmes avec l'utilisation de min et max. Dans les valeurs à tester par min/max, il ne faut pas que deux parenthèses soient l'une derrière l'autre, donc "((" par exemple est à proscrire.
 J'ai rencontré le même genre de problème avec round.
 
