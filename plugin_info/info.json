@@ -6,6 +6,6 @@
 	"author": "DavZero",
 	"require": "3.2.12",
 	"category": "wellness",
-	"changelog": "https://davzero.github.io/jeedom-boilerThermostat/#language#/changelog",
-	"documentation": "https://davzero.github.io/jeedom-boilerThermostat/#language#/"
+	"changelog": "https://davzero.github.io/jeedom_boilerThermostat/#language#/changelog",
+	"documentation": "https://davzero.github.io/jeedom_boilerThermostat/#language#/"
 }
