@@ -166,7 +166,6 @@ Paramétrage des thermostats
 Il faut commencer par créer un thermostat.
 Il est possible de créer autant de thermostat que souhaité.
 
-image::../images/boilerThermostat_screenshot5.JPG[]
 ![boilerThermostat_screenshot5](../images/boilerThermostat_screenshot5.JPG)
 
 Il faut configurer la sonde de température associée, ainsi que l'hystérésis 

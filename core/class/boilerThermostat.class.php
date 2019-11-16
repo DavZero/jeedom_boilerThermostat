@@ -46,6 +46,7 @@ class boilerThermostat extends eqLogic
       //Récupération de l'actionneur correspondant
       $actuators = $eqp->getConfiguration('childActuators');
       $validActuator = null;
+      $validActuatorCmd = null;
       foreach ($actuators as $actuator) {
         if ($actuator['type'] != 0) continue;
         $actuatorCmd = cmd::byId(str_replace('#', '', $actuator['cmd']));
@@ -53,44 +54,40 @@ class boilerThermostat extends eqLogic
         //log::add('boilerThermostat', 'debug', 'value lié de  : ' . str_replace('#', '', $actuatorCmdValue) . ' vs ' . $param['event_id']);
         if (str_replace('#', '', $actuatorCmdValue) != $param['event_id']) continue;
         $validActuator = $actuator;
+        $validActuatorCmd = str_replace('#', '', $actuator['cmd']);
         break;
       }
 
       if ($validActuator == null) throw new Exception($processKey . ' : ' . 'Action introuvable avec ID=' . $param['event_id']);
 
+      //Récupération des anciennes valeurs de l'actionneur
+      $cmdOldValues = $eqp->getCmd('info', 'actuatorsValue');
+
       //On vérifie si l'evenement est valide
       $actuatorCmdInfo = cmd::byId($param['event_id']);
       if (!is_object($actuatorCmdInfo))
         throw new Exception($processKey . ' : ' . "Impossible de trouver l'emetteur de l'évènement");
-      $collectDate = $actuatorCmdInfo->getCache('collectDate');
       $valueDate = $actuatorCmdInfo->getCache('valueDate');
-      if ($validActuator['ignoreFirstEvent'] == 1) {
-        $actuatorsStatus = $eqp->getConfiguration('actuatorsStatus');
-        log::add('boilerThermostat', 'debug', $processKey . ' : ' . ' Ancien status : ' . $actuatorsStatus[$param['event_id']]);
-        if ($collectDate != $valueDate && $actuatorsStatus[$param['event_id']] == 1) {
-          log::add('boilerThermostat', 'debug', $processKey . ' : ' . ' Evenement valide, collectDate : ' . $collectDate  . ', valueDate : ' . $valueDate);
-          $actuatorsStatus[$param['event_id']] = 0;
-          $actuatorsStatus = $eqp->setConfiguration('actuatorsStatus', $actuatorsStatus);
-          $eqp->save();
-        } else if ($collectDate == $valueDate && $actuatorsStatus[$param['event_id']] != 1) {
-          log::add('boilerThermostat', 'debug', $processKey . ' : ' . ' Evenement non valide, collectDate : ' . $collectDate  . ', valueDate : ' . $valueDate);
-          $actuatorsStatus[$param['event_id']] = 1;
-          $actuatorsStatus = $eqp->setConfiguration('actuatorsStatus', $actuatorsStatus);
-          $eqp->save();
-          return;
-        } else {
-          log::add('boilerThermostat', 'debug', $processKey . ' : ' . ' Evenement non valide sans incidence sur le statut, collectDate : ' . $collectDate  . ', valueDate : ' . $valueDate);
-          return;
-        }
-      } else {
-        if ($collectDate == $valueDate)
-          log::add('boilerThermostat', 'debug', $processKey . ' : ' . ' Evenement valide, collectDate : ' . $collectDate  . ', valueDate : ' . $valueDate);
-        else {
-          log::add('boilerThermostat', 'debug', $processKey . ' : ' . ' Evenement non valide, collectDate : ' . $collectDate  . ', valueDate : ' . $valueDate);
-          return;
-        }
-      }
-      log::add('boilerThermostat', 'debug', $processKey . ' : ' . ' Hysteresis : ' . $eqp->getConfiguration('hysteresis')  . ', offset : ' . $validActuator['offset']);
+      $oldValues = json_decode($cmdOldValues->execCmd(), true);
+      $cmdOldValues->setCollectDate('');
+      //$nbSecondSinceLastCollectDate = new DateTime($valueDate) - new DateTime($oldValues[$validActuatorCmd]->last->date);
+      $nbSecondSinceLastCollectDate = strtotime($valueDate) - strtotime($oldValues[$validActuatorCmd]["last"]["date"]);
+      $lastValue = $oldValues[$validActuatorCmd]["last"]["value"];
+      $lastlastValue = $oldValues[$validActuatorCmd]["lastlast"]["value"];
+      log::add('boilerThermostat', 'debug', $processKey . ' : ' . 'lastValue  : ' . $lastValue . ' & lastlastValue : ' . $lastlastValue . ' & deltaT = ' . $nbSecondSinceLastCollectDate);
+      $isEventInvalid = ($lastValue == $param['value'] || ($lastlastValue == $param['value'] && $nbSecondSinceLastCollectDate < 10));
+      log::add('boilerThermostat', 'debug', $processKey . ' : ' . 'old setPoint Values  : ' . json_encode($oldValues));
+      $oldValues[$validActuatorCmd]["lastlast"] = $oldValues[$validActuatorCmd]["last"];
+      $oldValues[$validActuatorCmd]["last"]["value"] = $param['value'];
+      $oldValues[$validActuatorCmd]["last"]["date"] = $valueDate;
+      $cmdOldValues->event(json_encode($oldValues));
+      log::add('boilerThermostat', 'debug', $processKey . ' : ' . 'new setPoint Values  : ' . json_encode($oldValues));
+
+      if ($isEventInvalid) {
+        //C'est un evenement incorrect on gere la maj de l'info et log et on quitte
+        log::add('boilerThermostat', 'debug', $processKey . ' : ' . 'Evenement sur cmdID  : ' . $param['event_id'] . ' invalide');
+        return;
+      } else  log::add('boilerThermostat', 'debug', $processKey . ' : ' . 'Evenement sur cmdID  : ' . $param['event_id'] . ' valide');
 
       //Calcul de la consigne lié
       $newSetPoint = $param['value'] - $validActuator['offset'];
@@ -445,9 +442,24 @@ class boilerThermostat extends eqLogic
         $cmd->setType('info');
         $cmd->setSubType('string');
         $cmd->setIsVisible(0);
-        $cmd->setOrder(2);
+        $cmd->setOrder(6);
         $cmd->save();
         $cmd->event(__('Arrêté', __FILE__));
+      }
+
+      //Etat (humain)
+      $cmd = $this->getCmd(null, 'actuatorsValue');
+      if (!is_object($cmd)) {
+        $cmd = new boilerThermostatCmd();
+        $cmd->setName(__('actuatorsValue', __FILE__));
+        $cmd->setLogicalId('actuatorsValue');
+        $cmd->setEqLogic_id($this->getId());
+        $cmd->setType('info');
+        $cmd->setSubType('string');
+        $cmd->setIsVisible(0);
+        $cmd->setOrder(7);
+        $cmd->save();
+        $cmd->event('[]');
       }
 
       //Gestion des modes
@@ -456,6 +468,44 @@ class boilerThermostat extends eqLogic
       log::add('boilerThermostat', 'error', displayExeption($e) . ', errCode : ' . $e->getCode());
       throw $e;
     }
+  }
+
+  public function UpdateActuatorsValues()
+  {
+    $cmd = $this->getCmd(null, 'actuatorsValue');
+    if (!is_object($cmd)) {
+      $this->addThermostatCmds();
+      $cmd = $this->getCmd(null, 'actuatorsValue');
+    }
+    $valueActuators = json_decode($cmd->execCmd(), true);
+    $cmd->execCmd();
+    $cmd->setCollectDate('');
+    $actuators = $this->getConfiguration('childActuators');
+    $updated = false;
+    $newActuatorValues = array();
+    if (is_array($actuators)) {
+      //On gére les actionneurs associé aux thermostats
+      foreach ($actuators as $actuator) {
+        if (isset($actuator['type']) && $actuator['type'] != 0) continue;
+        $actuatorID = str_replace('#', '', $actuator['cmd']);
+        log::add('boilerThermostat', 'debug', 'debugcmd : ' . json_encode($actuator));
+        if (isset($valueActuators[$actuatorID]["last"]["value"])) {
+          $newActuatorValues[$actuatorID] = $valueActuators[$actuatorID];
+          continue;
+        }
+        $actuatorCmd = cmd::byId($actuatorID);
+        $actuatorCmdValue = str_replace('#', '', $actuatorCmd->getValue());
+        $actuatorCmdInfo = cmd::byId($actuatorCmdValue);
+        $newActuatorValues[$actuatorID]["last"]["date"] = $actuatorCmdInfo->getCache('valueDate');
+        $newActuatorValues[$actuatorID]["last"]["value"] = $actuatorCmdInfo->execCmd();
+        $newActuatorValues[$actuatorID]["lastlast"]["date"] = "2001-01-01 00:00:00.000";
+        $newActuatorValues[$actuatorID]["lastlast"]["value"] = "-20";
+        $updated = true;
+      }
+
+      //On met a jour l'info si nécessaire
+      if ($updated === true) $cmd->event(json_encode($newActuatorValues));
+    } else $cmd->event(json_encode('[]'));
   }
 
   public function copy($_name)
@@ -667,6 +717,7 @@ class boilerThermostat extends eqLogic
       }
       if ($this->getConfiguration('type') == 'Thermostat') {
         $this->addThermostatCmds();
+        $this->UpdateActuatorsValues();
       } elseif ($this->getConfiguration('type') == 'Manager') $this->addManagerCmds();
       else throw new Exception('Unable to create equipment, unknown eqp config type : ' . $this->getConfiguration('type'));
 
