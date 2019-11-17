@@ -240,6 +240,15 @@ function addActuator(_action, _name, _el) {
   div += '<div class="col-sm-1 input-group-sm" style="min-width:80px">';
   div += '<input type="number" class="expressionAttr form-control" data-l1key="offset" step="0.1" min="-5" max="5" value="0"/>';
   div += '</div>';
+  div += '<label class="col-sm-1 control-label" style="min-width:100px">' + 'Arrondi' + '</label>';
+  div += '<div class="col-sm-1" style="min-width:100px">';
+  div += '<div class="input-group input-group-sm">';
+  div += '<select class="expressionAttr input-sm" data-l1key="round">';
+  div += '<option value="0">0.5</option>'
+  div += '<option value="1">1</option>'
+  div += '</select>';
+  div += '</div>';
+  div += '</div>';
   div += '<div class="col-sm-1" style="min-width:230px">';
   div += '<label class="checkbox-inline">';
   div += '<input type="checkbox" class="expressionAttr" data-l1key="isSetPointController"/>controle la consigne</label>';

@@ -1,3 +1,9 @@
+# 17/11/2019
+
+- Ajout d'une option pour arrondir la valeur de consigne calculer par actionneur a 0,5 ou 1 °C pret,
+  pour améliorer la compatibilité avec le thermostat SRT-321. cf. https://community.jeedom.com/t/probleme-entre-srt-321-et-thermostat-virtuel/6237
+- Passage au nouveau de mode de documentation
+
 # 16/11/2019
 
 - Optimisation gestion controle de la consigne

@@ -61,27 +61,30 @@ class boilerThermostat extends eqLogic
       if ($validActuator == null) throw new Exception($processKey . ' : ' . 'Action introuvable avec ID=' . $param['event_id']);
 
       //Récupération des anciennes valeurs de l'actionneur
-      $cmdOldValues = $eqp->getCmd('info', 'actuatorsValue');
+      //$cmdOldValues = $eqp->getCmd('info', 'actuatorsValue');
+
 
       //On vérifie si l'evenement est valide
       $actuatorCmdInfo = cmd::byId($param['event_id']);
       if (!is_object($actuatorCmdInfo))
         throw new Exception($processKey . ' : ' . "Impossible de trouver l'emetteur de l'évènement");
       $valueDate = $actuatorCmdInfo->getCache('valueDate');
-      $oldValues = json_decode($cmdOldValues->execCmd(), true);
-      $cmdOldValues->setCollectDate('');
+      //$oldValues = json_decode($cmdOldValues->execCmd(), true);
+      //$cmdOldValues->setCollectDate('');
+      $actuatorsHistory = json_decode($eqp->getCache('actuatorsHistory'), true);
       //$nbSecondSinceLastCollectDate = new DateTime($valueDate) - new DateTime($oldValues[$validActuatorCmd]->last->date);
-      $nbSecondSinceLastCollectDate = strtotime($valueDate) - strtotime($oldValues[$validActuatorCmd]["last"]["date"]);
-      $lastValue = $oldValues[$validActuatorCmd]["last"]["value"];
-      $lastlastValue = $oldValues[$validActuatorCmd]["lastlast"]["value"];
+      $nbSecondSinceLastCollectDate = strtotime($valueDate) - strtotime($actuatorsHistory[$validActuatorCmd]["last"]["date"]);
+      $lastValue = $actuatorsHistory[$validActuatorCmd]["last"]["value"];
+      $lastlastValue = $actuatorsHistory[$validActuatorCmd]["lastlast"]["value"];
       log::add('boilerThermostat', 'debug', $processKey . ' : ' . 'lastValue  : ' . $lastValue . ' & lastlastValue : ' . $lastlastValue . ' & deltaT = ' . $nbSecondSinceLastCollectDate);
       $isEventInvalid = ($lastValue == $param['value'] || ($lastlastValue == $param['value'] && $nbSecondSinceLastCollectDate < 10));
-      log::add('boilerThermostat', 'debug', $processKey . ' : ' . 'old setPoint Values  : ' . json_encode($oldValues));
-      $oldValues[$validActuatorCmd]["lastlast"] = $oldValues[$validActuatorCmd]["last"];
-      $oldValues[$validActuatorCmd]["last"]["value"] = $param['value'];
-      $oldValues[$validActuatorCmd]["last"]["date"] = $valueDate;
-      $cmdOldValues->event(json_encode($oldValues));
-      log::add('boilerThermostat', 'debug', $processKey . ' : ' . 'new setPoint Values  : ' . json_encode($oldValues));
+      log::add('boilerThermostat', 'debug', $processKey . ' : ' . 'old setPoint Values  : ' . json_encode($actuatorsHistory));
+      $actuatorsHistory[$validActuatorCmd]["lastlast"] = $actuatorsHistory[$validActuatorCmd]["last"];
+      $actuatorsHistory[$validActuatorCmd]["last"]["value"] = $param['value'];
+      $actuatorsHistory[$validActuatorCmd]["last"]["date"] = $valueDate;
+      $eqp->setCache('actuatorsHistory', json_encode($actuatorsHistory));
+      //$cmdOldValues->event(json_encode($oldValues));
+      log::add('boilerThermostat', 'debug', $processKey . ' : ' . 'new setPoint Values  : ' . json_encode($actuatorsHistory));
 
       if ($isEventInvalid) {
         //C'est un evenement incorrect on gere la maj de l'info et log et on quitte
@@ -91,8 +94,10 @@ class boilerThermostat extends eqLogic
 
       //Calcul de la consigne lié
       $newSetPoint = $param['value'] - $validActuator['offset'];
+      $rounding = 0.5;
+      if ($validActuator['round'] == 1) $rounding = 1;
       $newSetPoint = $newSetPoint - $eqp->getConfiguration('hysteresis');
-      $newSetPoint = round($newSetPoint * 2 - 0.49, 0) / 2;
+      $newSetPoint = round(($newSetPoint - $eqp->getConfiguration('hysteresis')) / $rounding - 0.49, 0) * $rounding;
       //Calcul du delta consigne vs consigne ajustée
       $cmdSetPoint = $eqp->getCmd('info', 'setPoint');
       $cmdAdjustedSetPoint = $eqp->getCmd('info', 'adjustedSetPoint');
@@ -448,7 +453,7 @@ class boilerThermostat extends eqLogic
       }
 
       //Etat (humain)
-      $cmd = $this->getCmd(null, 'actuatorsValue');
+      /*$cmd = $this->getCmd(null, 'actuatorsValue');
       if (!is_object($cmd)) {
         $cmd = new boilerThermostatCmd();
         $cmd->setName(__('actuatorsValue', __FILE__));
@@ -460,7 +465,7 @@ class boilerThermostat extends eqLogic
         $cmd->setOrder(7);
         $cmd->save();
         $cmd->event('[]');
-      }
+      }*/
 
       //Gestion des modes
       $this->modeManagement();
@@ -472,14 +477,15 @@ class boilerThermostat extends eqLogic
 
   public function UpdateActuatorsValues()
   {
-    $cmd = $this->getCmd(null, 'actuatorsValue');
+    /*$cmd = $this->getCmd(null, 'actuatorsValue');
     if (!is_object($cmd)) {
       $this->addThermostatCmds();
       $cmd = $this->getCmd(null, 'actuatorsValue');
-    }
-    $valueActuators = json_decode($cmd->execCmd(), true);
-    $cmd->execCmd();
-    $cmd->setCollectDate('');
+    }*/
+    //$valueActuators = json_decode($cmd->execCmd(), true);
+    //$cmd->execCmd();
+    //$cmd->setCollectDate('');
+    $actuatorsHistory = json_decode($this->getCache('actuatorsHistory'), true);
     $actuators = $this->getConfiguration('childActuators');
     $updated = false;
     $newActuatorValues = array();
@@ -489,8 +495,8 @@ class boilerThermostat extends eqLogic
         if (isset($actuator['type']) && $actuator['type'] != 0) continue;
         $actuatorID = str_replace('#', '', $actuator['cmd']);
         log::add('boilerThermostat', 'debug', 'debugcmd : ' . json_encode($actuator));
-        if (isset($valueActuators[$actuatorID]["last"]["value"])) {
-          $newActuatorValues[$actuatorID] = $valueActuators[$actuatorID];
+        if (isset($actuatorsHistory[$actuatorID]["last"]["value"])) {
+          $newActuatorValues[$actuatorID] = $actuatorsHistory[$actuatorID];
           continue;
         }
         $actuatorCmd = cmd::byId($actuatorID);
@@ -504,8 +510,8 @@ class boilerThermostat extends eqLogic
       }
 
       //On met a jour l'info si nécessaire
-      if ($updated === true) $cmd->event(json_encode($newActuatorValues));
-    } else $cmd->event(json_encode('[]'));
+      if ($updated === true) $this->setCache('actuatorsHistory', json_encode($newActuatorValues));
+    } else $this->setCache('actuatorsHistory', json_encode(''));
   }
 
   public function copy($_name)
@@ -605,14 +611,14 @@ class boilerThermostat extends eqLogic
     return $this->getManager()->getCmd(null, 'state')->getConfiguration('value');
   }
 
-  public function getChildSetPointValue()
+  /*public function getChildSetPointValue()
   {
     $adjustedSetPointCmd = $this->getCmd(null, 'adjustedSetPoint');
     if (!is_object($adjustedSetPointCmd)) return 0;
     return $adjustedSetPointCmd->getConfiguration('childSetpoint', 0);
-  }
+  }*/
 
-  public function setChildSetPointValue($newValue)
+  /*public function setChildSetPointValue($newValue)
   {
     $adjustedSetPointCmd = $this->getCmd(null, 'adjustedSetPoint');
     if (!is_object($adjustedSetPointCmd)) {
@@ -621,21 +627,11 @@ class boilerThermostat extends eqLogic
     }
     $adjustedSetPointCmd->setConfiguration('childSetpoint', $newValue);
     $adjustedSetPointCmd->save();
-  }
+  }*/
 
   public function processChildActuators($type, $setPoint = null)
   {
-    //Si option est défini, on calcul la valeur a utilisé et on vérifie si il y a besoin de changer
     $opts = array();
-    if ($type == 0 && isset($setPoint)) {
-      $opts['slider'] = round(($setPoint + $this->getConfiguration('hysteresis')) * 2 + 0.49, 0) / 2;
-      if ($opts['slider'] != $this->getChildSetPointValue()) {
-        $this->setChildSetPointValue($opts['slider']);
-      }
-      //Si pas besoin de mise a jour on quitte pour ne pas faire travailler les vannes pour rien. A commenter si inutile??
-      else return;
-    }
-
     $actuators = $this->getConfiguration('childActuators');
     if (is_array($actuators)) {
       //On gére les actionneurs associé aux thermostats
@@ -643,12 +639,16 @@ class boilerThermostat extends eqLogic
         if (!isset($action['type'])) $action['type'] = 0;
         //On gere les actionneurs sur consigne
         if ($action['type'] != $type) continue;
-        if (!isset($action['offset'])) $action['offset'] = 0;
-        $tmpOpt = $opts;
-        $tmpOpt['slider'] += $action['offset'];
-        //Convertir array en string (json php)?
-        log::add('boilerThermostat', 'info', 'Execution de la commande : ' . $action['cmd'] . " avec les options " . json_encode($tmpOpt));
-        scenarioExpression::createAndExec('action', $action['cmd'], $tmpOpt);
+        if ($type == 0) {
+          $rounding = 0.5;
+          if ($action['round'] == 1) $rounding = 1;
+          $offset = 0;
+          if (isset($action['offset'])) $offset = $action['offset'];
+          $opts['slider'] = round(($setPoint + $this->getConfiguration('hysteresis')) / $rounding + 0.49, 0) * $rounding + $offset;
+        }
+
+        log::add('boilerThermostat', 'info', 'Execution de la commande : ' . $action['cmd'] . " avec les options " . json_encode($opts));
+        scenarioExpression::createAndExec('action', $action['cmd'], $opts);
       }
     }
   }
