@@ -92,24 +92,29 @@ class boilerThermostat extends eqLogic
         return;
       } else  log::add('boilerThermostat', 'debug', $processKey . ' : ' . 'Evenement sur cmdID  : ' . $param['event_id'] . ' valide');
 
-      //Calcul de la consigne lié
-      $newSetPoint = $param['value'] - $validActuator['offset'];
+      //Test si la consigne actuel correspond a la consigne de la vanne
+      $cmdAdjustedSetPoint = $eqp->getCmd('info', 'adjustedSetPoint');
+      $adjustedSetpointValue = $cmdAdjustedSetPoint->execCmd();
       $rounding = 0.5;
       if ($validActuator['round'] == 1) $rounding = 1;
-      $newSetPoint = $newSetPoint - $eqp->getConfiguration('hysteresis');
+      $offset = 0;
+      if (isset($validActuator['offset'])) $offset = $validActuator['offset'];
+      $newActuatorValue = round(($adjustedSetpointValue + $eqp->getConfiguration('hysteresis')) / $rounding + 0.49, 0) * $rounding + $offset;
+      if ($newActuatorValue  == $param['value']) {
+        log::add('boilerThermostat', 'debug', $processKey . ' : ' . 'No need to change setPoint');
+        return;
+      }
+
+      //Calcul de la consigne lié
+      $newSetPoint = $param['value'] - $offset;
+      $rounding = 0.5;
       $newSetPoint = round(($newSetPoint - $eqp->getConfiguration('hysteresis')) / $rounding - 0.49, 0) * $rounding;
       //Calcul du delta consigne vs consigne ajustée
       $cmdSetPoint = $eqp->getCmd('info', 'setPoint');
-      $cmdAdjustedSetPoint = $eqp->getCmd('info', 'adjustedSetPoint');
-      $adjustedSetpointValue = $cmdAdjustedSetPoint->execCmd();
 
       //On controle que la consigne est bien supérieur à la valeur min
       if ($newSetPoint < $cmdAdjustedSetPoint->getConfiguration('minValue', $newSetPoint)) {
         log::add('boilerThermostat', 'info', $processKey . ' : ' . 'Le retour de consigne est inférieur à la valeur min de consigne : ' . $newSetPoint);
-        return;
-      }
-      if ($newSetPoint == $adjustedSetpointValue) {
-        log::add('boilerThermostat', 'debug', $processKey . ' : ' . 'New value already equal to adjusted value : ' . $newSetPoint);
         return;
       }
 
