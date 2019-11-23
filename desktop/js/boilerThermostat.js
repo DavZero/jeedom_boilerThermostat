@@ -24,60 +24,60 @@ tempSensor.val(result.human);
 });*/
 
 $('#bt_addActuator').on('click', function () {
-    addActuator(null,'{{Actionneur}}',$('#div_actuators'))
+  addActuator(null, '{{Actionneur}}', $('#div_actuators'))
 });
 
 $('#bt_addMode').on('click', function () {
-    bootbox.prompt("{{Nom du mode ?}}", function (result) {
-        if (result !== null) {
-            addMode({name: result},$('#div_modes'));
-        }
-    });
+  bootbox.prompt("{{Nom du mode ?}}", function (result) {
+    if (result !== null) {
+      addMode({ name: result }, $('#div_modes'));
+    }
+  });
 });
 
 $("body").delegate(".listCmdChildActuatorAction", 'click', function () {
-    var el = $(this).closest('.childActuator').find('.expressionAttr[data-l1key=cmd]');
-    //jeedom.cmd.getSelectModal({cmd: {type: 'action', subType:'slider'}}, function (result) {
-    jeedom.cmd.getSelectModal({cmd: {type: 'action'}}, function (result) {
-        el.value(result.human);
-    });
+  var el = $(this).closest('.childActuator').find('.expressionAttr[data-l1key=cmd]');
+  //jeedom.cmd.getSelectModal({cmd: {type: 'action', subType:'slider'}}, function (result) {
+  jeedom.cmd.getSelectModal({ cmd: { type: 'action' } }, function (result) {
+    el.value(result.human);
+  });
 });
 
 $("body").delegate(".listCmdOtherAction", 'click', function () {
-    var el = $(this).closest('.form-group').find('.configKey');
-    jeedom.cmd.getSelectModal({cmd: {type: 'action', subType:'other'}}, function (result) {
-        if (el.attr('data-concat') == 1) {
-            el.atCaret('insert', result.human);
-        } else {
-            el.value(result.human);
-        }
-    });
+  var el = $(this).closest('.form-group').find('.configKey');
+  jeedom.cmd.getSelectModal({ cmd: { type: 'action', subType: 'other' } }, function (result) {
+    if (el.attr('data-concat') == 1) {
+      el.atCaret('insert', result.human);
+    } else {
+      el.value(result.human);
+    }
+  });
 });
 
 $("body").delegate(".listCmdNumericInfo", 'click', function () {
-    var el = $(this).closest('.form-group').find('.eqLogicAttr');
-    jeedom.cmd.getSelectModal({cmd: {type: 'info', subType:'numeric'}}, function (result) {
-        if (el.attr('data-concat') == 1) {
-            el.atCaret('insert', result.human);
-        } else {
-            el.value(result.human);
-        }
-    });
+  var el = $(this).closest('.form-group').find('.eqLogicAttr');
+  jeedom.cmd.getSelectModal({ cmd: { type: 'info', subType: 'numeric' } }, function (result) {
+    if (el.attr('data-concat') == 1) {
+      el.atCaret('insert', result.human);
+    } else {
+      el.value(result.human);
+    }
+  });
 });
 
-$("#div_actuators").on('change','.actuatorType', function () {
-    if ($(this).val() == 0)
-      $(this).closest('.childActuator').find('.setPointActuatorOptions').show();
-    else
-      $(this).closest('.childActuator').find('.setPointActuatorOptions').hide();
+$("#div_actuators").on('change', '.actuatorType', function () {
+  if ($(this).val() == 0)
+    $(this).closest('.childActuator').find('.setPointActuatorOptions').show();
+  else
+    $(this).closest('.childActuator').find('.setPointActuatorOptions').hide();
 });
 
- $("#div_actuators").delegate('.bt_removeAction', 'click', function () {
-    $(this).closest('.childActuator').remove();
+$("#div_actuators").delegate('.bt_removeAction', 'click', function () {
+  $(this).closest('.childActuator').remove();
 });
 
 $("#div_modes").delegate('.bt_removeAction', 'click', function () {
-   $(this).closest('.mode').remove();
+  $(this).closest('.mode').remove();
 });
 
 /*$('.eqLogicAction[data-action=addManager]').off('click').on('click', function() {
@@ -106,14 +106,14 @@ $("#div_modes").delegate('.bt_removeAction', 'click', function () {
   });
 });*/
 
-$('.eqLogicAction[data-action=addThermostat]').off('click').on('click', function() {
-  bootbox.prompt("{{Nom de l'équipement ?}}", function(result) {
+$('.eqLogicAction[data-action=addThermostat]').off('click').on('click', function () {
+  bootbox.prompt("{{Nom de l'équipement ?}}", function (result) {
     if (result !== null) {
       jeedom.eqLogic.save({
         type: eqType,
-        eqLogics: [{name: result, configuration: {type: 'Thermostat'}}],
+        eqLogics: [{ name: result, configuration: { type: 'Thermostat' } }],
         error: function (error) {
-          $('#div_alert').showAlert({message: error.message, level: 'danger'});
+          $('#div_alert').showAlert({ message: error.message, level: 'danger' });
         },
         success: function (_data) {
           var vars = getUrlVars();
@@ -133,11 +133,11 @@ $('.eqLogicAction[data-action=addThermostat]').off('click').on('click', function
 });
 
 $("#table_cmd").delegate(".listEquipementInfo", 'click', function () {
-    var el = $(this);
-    jeedom.cmd.getSelectModal({cmd: {type: 'info'}}, function (result) {
-        var calcul = el.closest('tr').find('.cmdAttr[data-l1key=configuration][data-l2key=' + el.data('input') + ']');
-        calcul.atCaret('insert', result.human);
-    });
+  var el = $(this);
+  jeedom.cmd.getSelectModal({ cmd: { type: 'info' } }, function (result) {
+    var calcul = el.closest('tr').find('.cmdAttr[data-l1key=configuration][data-l2key=' + el.data('input') + ']');
+    calcul.atCaret('insert', result.human);
+  });
 });
 
 $("#table_cmd").sortable({
@@ -150,46 +150,44 @@ $("#table_cmd").sortable({
 });
 
 function printEqLogic(_eqLogic) {
-    if (_eqLogic.configuration.type == 'Thermostat')
-    {
-      $('.thermostat').show();
-      $('.manager').hide();
-    }
-    else if (_eqLogic.configuration.type == 'Manager')
-    {
-      $('.manager').show();
-      $('.thermostat').hide();
-    }
+  if (_eqLogic.configuration.type == 'Thermostat') {
+    $('.thermostat').show();
+    $('.manager').hide();
+  }
+  else if (_eqLogic.configuration.type == 'Manager') {
+    $('.manager').show();
+    $('.thermostat').hide();
+  }
 
-    $('#div_actuators').empty();
-    $('#div_modes').empty();
-    if (isset(_eqLogic.configuration)) {
-        if (isset(_eqLogic.configuration.childActuators)) {
-            for (var i in _eqLogic.configuration.childActuators) {
-                addActuator(_eqLogic.configuration.childActuators[i],'{{Actionneur}}',$('#div_actuators'));
-            }
-        }
+  $('#div_actuators').empty();
+  $('#div_modes').empty();
+  if (isset(_eqLogic.configuration)) {
+    if (isset(_eqLogic.configuration.childActuators)) {
+      for (var i in _eqLogic.configuration.childActuators) {
+        addActuator(_eqLogic.configuration.childActuators[i], '{{Actionneur}}', $('#div_actuators'));
+      }
     }
+  }
 
-    if (isset(_eqLogic.configuration.modes)) {
-            for (var i in _eqLogic.configuration.modes) {
-                addMode(_eqLogic.configuration.modes[i],$('#div_modes'));
-            }
-        }
+  if (isset(_eqLogic.configuration.modes)) {
+    for (var i in _eqLogic.configuration.modes) {
+      addMode(_eqLogic.configuration.modes[i], $('#div_modes'));
+    }
+  }
 }
 
 function saveEqLogic(_eqLogic) {
-    if (!isset(_eqLogic.configuration)) {
-        _eqLogic.configuration = {};
-    }
-    _eqLogic.configuration.childActuators = $('#div_actuators').find('.childActuator').getValues('.expressionAttr');
-    _eqLogic.configuration.modes = $('#div_modes').find('.mode').getValues('.expressionAttr');
-    return _eqLogic;
+  if (!isset(_eqLogic.configuration)) {
+    _eqLogic.configuration = {};
+  }
+  _eqLogic.configuration.childActuators = $('#div_actuators').find('.childActuator').getValues('.expressionAttr');
+  _eqLogic.configuration.modes = $('#div_modes').find('.mode').getValues('.expressionAttr');
+  return _eqLogic;
 }
 
-function addMode(_mode,_el){
+function addMode(_mode, _el) {
   if (!isset(_mode)) {
-      _mode = {};
+    _mode = {};
   }
 
   var div = '<div class="form-group mode">';
@@ -203,64 +201,66 @@ function addMode(_mode,_el){
   div += '</div>';
   div += '</div>';
   if (isset(_el)) {
-      _el.append(div);
-      _el.find('.mode:last').setValues(_mode, '.expressionAttr');
+    _el.append(div);
+    _el.find('.mode:last').setValues(_mode, '.expressionAttr');
   }
 }
 
 function addActuator(_action, _name, _el) {
-    if (!isset(_action)) {
-        _action = {};
-    }
+  if (!isset(_action)) {
+    _action = {};
+  }
 
-    var input = '';
-    var button = 'btn-default';
-    var div = '<div class="childActuator form-group">';
+  var input = '';
+  var button = 'btn-default';
+  var div = '<div class="childActuator form-group">';
 
-    div += '<label class="col-sm-1 control-label" style="min-width:100px">' + _name + '</label>';
-    div += '<div class="col-sm-3">';
-    div += '<div class="input-group input-group-sm">';
-    div += '<span class="input-group-btn"><a class="btn btn-default bt_removeAction roundedLeft" titre="Supprimer"><i class="fas fa-minus-circle"></i></a></span>';
-    div += '<input type="text" class="expressionAttr form-control CmdAction" data-l1key="cmd" placeholder="Séléctionner une commande">';
-    div += '<span class="input-group-btn"><a class="btn btn-default listCmdChildActuatorAction roundedRight" titre="Selectionner"><i class="fas fa-list-alt"></i></a></span>';
-    div += '</div>';
-    div += '</div>';
+  div += '<label class="col-sm-1 control-label" style="min-width:100px">' + _name + '</label>';
+  div += '<div class="col-sm-3">';
+  div += '<div class="input-group input-group-sm">';
+  div += '<span class="input-group-btn"><a class="btn btn-default bt_removeAction roundedLeft" titre="Supprimer"><i class="fas fa-minus-circle"></i></a></span>';
+  div += '<input type="text" class="expressionAttr form-control CmdAction" data-l1key="cmd" placeholder="Séléctionner une commande">';
+  div += '<span class="input-group-btn"><a class="btn btn-default listCmdChildActuatorAction roundedRight" titre="Selectionner"><i class="fas fa-list-alt"></i></a></span>';
+  div += '</div>';
+  div += '</div>';
 
-    div += '<label class="col-sm-1 control-label" style="min-width:100px">' + 'Type' + '</label>';
-    div += '<div class="col-sm-1" style="min-width:100px">';
-    div += '<div class="input-group input-group-sm">';
-    div += '<select class="actuatorType expressionAttr input-sm" data-l1key="type">';
-    div += '<option value="0">{{Consigne}}</option>'
-    div += '<option value="1">{{On}}</option>'
-    div += '<option value="2">{{Off}}</option>'
-    div += '</select>';
-    div += '</div>';
-    div += '</div>';
+  div += '<label class="col-sm-1 control-label" style="min-width:100px">' + 'Type' + '</label>';
+  div += '<div class="col-sm-1" style="min-width:100px">';
+  div += '<div class="input-group input-group-sm">';
+  div += '<select class="actuatorType expressionAttr input-sm" data-l1key="type">';
+  div += '<option value="0">{{Consigne}}</option>'
+  div += '<option value="1">{{On}}</option>'
+  div += '<option value="2">{{Off}}</option>'
+  div += '</select>';
+  div += '</div>';
+  div += '</div>';
 
-    div += '<div class="setPointActuatorOptions" hidden>'
-    div += '<label class="col-sm-1 control-label" style="min-width:100px">' + 'Offset' + '</label>';
-    div += '<div class="col-sm-1 input-group-sm" style="min-width:80px">';
-    div += '<input type="number" class="expressionAttr form-control" data-l1key="offset" step="0.1" min="-5" max="5" value="0"/>';
-    div += '</div>';
-    div += '<div class="col-sm-1" style="min-width:230px">';
-    div += '<label class="checkbox-inline">';
-    div += '<input type="checkbox" class="expressionAttr" data-l1key="isSetPointController"/>controle la consigne</label>';
-    div += '</div>';
-    if (init(_action.isSetPointController) == 1)
-    {
-      div += '<div class="col-sm-2" style="min-width:250px">';
-      div += '<label class="checkbox-inline">';
-      div += '<input type="checkbox" class="expressionAttr" data-l1key="ignoreFirstEvent">ignorer premier evenement</label>';
-      div += '</div>';
-    }
-    div += '</div>';
+  div += '<div class="setPointActuatorOptions" hidden>'
+  div += '<label class="col-sm-1 control-label" style="min-width:100px">' + 'Offset' + '</label>';
+  div += '<div class="col-sm-1 input-group-sm" style="min-width:80px">';
+  div += '<input type="number" class="expressionAttr form-control" data-l1key="offset" step="0.1" min="-5" max="5" value="0"/>';
+  div += '</div>';
+  div += '<label class="col-sm-1 control-label" style="min-width:100px">' + 'Arrondi' + '</label>';
+  div += '<div class="col-sm-1" style="min-width:100px">';
+  div += '<div class="input-group input-group-sm">';
+  div += '<select class="expressionAttr input-sm" data-l1key="round">';
+  div += '<option value="0">0.5</option>'
+  div += '<option value="1">1</option>'
+  div += '</select>';
+  div += '</div>';
+  div += '</div>';
+  div += '<div class="col-sm-1" style="min-width:230px">';
+  div += '<label class="checkbox-inline">';
+  div += '<input type="checkbox" class="expressionAttr" data-l1key="isSetPointController"/>controle la consigne</label>';
+  div += '</div>';
+  div += '</div>';
 
-    div += '</div>';
+  div += '</div>';
 
-    if (isset(_el)) {
-        _el.append(div);
-        _el.find('.childActuator:last').setValues(_action, '.expressionAttr');
-    }
+  if (isset(_el)) {
+    _el.append(div);
+    _el.find('.childActuator:last').setValues(_action, '.expressionAttr');
+  }
 }
 
 /*
@@ -288,15 +288,14 @@ function addCmdToTable(_cmd) {
   tr += '<span class="subType" subType="' + init(_cmd.subType) + '"></span>';
   tr += '</td>';*/
   tr += '<td>';
-  if (init(_cmd.configuration.calcul) != '')
-  {
+  if (init(_cmd.configuration.calcul) != '') {
     tr += '<textarea class="cmdAttr form-control input-sm" data-l1key="configuration" data-l2key="calcul" style="height : 33px;" placeholder="{{Calcul}}"></textarea>';
     tr += '<a class="btn btn-default cursor listEquipementInfo btn-sm" data-input="calcul"><i class="fa fa-list-alt "></i> {{Rechercher équipement}}</a>';
   }
   tr += '</td>';
 
   tr += '<td style="width : 200px;">';
-  if (init(_cmd.type) == 'info' && (init(_cmd.subType) == 'numeric' ||init(_cmd.subType) == 'binary')) {
+  if (init(_cmd.type) == 'info' && (init(_cmd.subType) == 'numeric' || init(_cmd.subType) == 'binary')) {
     tr += '<label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-l1key="isHistorized" checked/>{{Historiser}}</label>';
   }
   tr += '<label class="checkbox-inline"><input type="checkbox" class="cmdAttr" data-l1key="isVisible" checked/>{{Afficher}}</label>';

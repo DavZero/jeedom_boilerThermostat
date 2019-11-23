@@ -82,7 +82,7 @@ le contenu.
 Sélectionner le niveau puis sauvegarder, le démon sera alors relancé
 avec les instructions et traces sélectionnées.
 
-Le niveau **Debug** ou **Info** peuvent être utiles pour comprendre
+Le niveau **Debug**ou**Info** peuvent être utiles pour comprendre
 pourquoi le démon plante ou ne remonte pas une valeur.
 
 > **Important**
@@ -90,7 +90,7 @@ pourquoi le démon plante ou ne remonte pas une valeur.
 > En mode **Debug** le démon est très verbeux, il est recommandé
 > d’utiliser ce mode seulement si vous devez diagnostiquer un problème
 > particulier. Il n’est pas recommandé de laisser tourner le démon en
-> **Debug** en permanence, si on utilise une **SD-Card**. Une fois le
+> **Debug**en permanence, si on utilise une**SD-Card**. Une fois le
 > debug terminé, il ne faut pas oublier de retourner sur un niveau moins
 > élevé comme le niveau **Error** qui ne remonte que d’éventuelles
 > erreurs.
